@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Used to define the routes in the system.
@@ -10,5 +10,13 @@
  * '/calendar' => 'calendar#index'
  */
 $routes = array(
-	'/test' => 'test#index'
+	'/test' => 'test#index', // default test page
+	'/home' => 'task#home', // main page
+
+	//'/delete'  => 'task#delete',
+
+	//'delete'   => 'task#delete',
+
+	'/web/index.php/delete' => 'task#delete'
+
 );
