@@ -4,12 +4,17 @@ class Taskcontroller extends ApplicationController
 {
     public function homeAction()
     {
-
         $model = new TaskModel();
 
-        $allTasks = $model->getAllTasks(); // go to json 
+        $keyWord = $_POST['keyWord'] ?? null;
 
-        $this->view->tasks = $allTasks;
+        if ($keyWord) {
+            $this->view->tasks = $model->searchTasks($keyWord);
+            $this->view->isSearch = true;
+        } else {
+            $this->view->tasks = $model->getAllTasks();
+            $this->view->isSearch = false;
+        }
     }
 
     public function deleteAction()
@@ -25,11 +30,23 @@ class Taskcontroller extends ApplicationController
 
     public function searchAction()
     {
-        $keyWord = $_POST['keyWord'];
+        $keyWord = $_POST['keyWord'] ?? '';
 
         $model = new TaskModel();
-        $filteredTasks = $model->searchTasks($keyWord);
 
-        $this->view->tasks = $filteredTasks;
+        if (!empty($keyWord)) {
+            // 2. The Model does the heavy lifting
+            $results = $model->searchTasks($keyWord);
+            $this->view->tasks = $results;
+        } else {
+            // 3. If they searched for nothing, just show everything
+            $this->view->tasks = $model->getAllTasks();
+        }
+
+
+        //header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
+        //exit;
+
+
     }
 }

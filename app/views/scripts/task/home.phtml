@@ -1,15 +1,3 @@
-<?php
-
-$showAllTasks = false;
-
-$keyWord = $_POST['keyWord'] ?? '';
-$displayTasksFiltered = [];
-if (!empty($$keyword)) {
-    $showAllTasks = true;
-    $this->view->tasks->searchTasks($keyWord);
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,17 +9,21 @@ if (!empty($$keyword)) {
 
 <body>
     <h1>Ta-Da! </h1>
-    <d href="search">
-        <form action="home.phtml" method="POST">
-            <input type="text" name="keyWord">
-            <input type="submit" value="Search">
-        </form>
-    </d>
+
+    <form action="home" method="POST">
+        <input type="text" name="keyWord">
+        <input type="submit" value="search">
+    </form>
+    <form action="home" method="POST">
+        <input type="submit" value="viewAll">
+    </form>
+
     <div id="create">
         <a> <!-- href="/task.phtml--> <button id="createTask"> + </button></a>
     </div>
 
     <div class="taskContainer">
+
         <?php $displayTasks = $this->view->tasks ?? $this->tasks ?? []; ?>
 
         <?php if (empty($displayTasks)):  // refers to the View object that is currently rendering the template.
@@ -47,8 +39,8 @@ if (!empty($$keyword)) {
                     <?php /*
                     <p>Status: <?php echo $task['status']; // need to add status to 'task'
                                 ?></p>*/ ?>
-                    <a id="editTask" action='update.phtml'><button>edit</button></a> <!-- find edit logo -->
-                    <a id="deleteTask" href="delete?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">
+                    <a action='update.phtml'><button>edit</button></a> <!-- find edit logo -->
+                    <a href="delete?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">
                         <button>delete</button></a> <!-- find bin logo / add pop-up box: are you sure?-->
 
                 </div>
@@ -56,27 +48,11 @@ if (!empty($$keyword)) {
         <?php endif; ?>
 
     </div>
-    </a>
 
-    <?php if ($showAllTasks): ?>
-        <?php foreach ($displayTasksFiltered as $task): ?>
-            <div class='taskBox' style="border: 1px solid black; width:200px; height:200px;" ;>
-                <h3><?php echo htmlspecialchars($task['name']); ?></h3>
-                <p><?php echo htmlspecialchars($task['description']); ?></p>
-                <p><?php echo htmlspecialchars($task['created_at']); ?></p>
 
-                <?php /*
-                    <p>Status: <?php echo $task['status']; // need to add status to 'task'
-                                ?></p>*/ ?>
-                <a action='update.phtml'><button>edit</button></a> <!-- find edit logo -->
-                <a href="delete?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">
-                    <button>delete</button></a> <!-- find bin logo / add pop-up box: are you sure?-->
 
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
 
-    </div>
+
 
 
 
