@@ -1,0 +1,57 @@
+<?php
+
+class TaskModel extends Model
+{
+
+    protected $jsonFile = ROOT_PATH . '/app/models/tasks.json';
+
+    public function __construct()
+    {
+        // By leaving this empty, we don't call parent::__construct()
+        // so the app stops looking for a MySQL server.
+    }
+
+    public function getAllTasks()
+    {
+        if (!file_exists($this->jsonFile)) {
+            return [];
+        }
+
+        // ** DEBUG: See if the file exists 
+        //var_dump("Looking for file at: " . $this->jsonFile);
+        //var_dump("File exists? " . (file_exists($this->jsonFile) ? 'YES' : 'NO'));
+
+
+        $jsonContent = file_get_contents($this->jsonFile); //exiting PHP functions -> retrieves a string
+        $data = json_decode($jsonContent, true); // existing PHP function  -> decodes THE string 
+        // true: turns the string into and array  -> $task['name']
+
+        // ** DEBUG: See what PHP actually thinks the data looks like
+        // var_dump($data);
+
+        return isset($data['tasks']) ? $data['tasks'] : [];
+
+        if (isset($data['tasks'])) {
+            return $data['tasks'];
+        }
+        return []; // Return empty if 'tasks' key isn't found
+    }
+
+    public function deleteTask($id)
+    {
+
+        $jsonContent = file_get_contents($this->jsonFile);
+        $data = json_decode($jsonContent, true);
+
+        foreach ($data['tasks'] as $key => $task) {
+            if ($task['id'] == $id) {
+                unset($data['tasks'][$key]);
+                break;
+            }
+        }
+
+        $data['tasks'] = array_values($data['tasks']); //reset values
+
+        file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT)); //save to file
+    }
+}

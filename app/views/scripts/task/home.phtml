@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo list</title>
+</head>
+
+<body>
+    <h1>Ta-Da! </h1>
+    <div id="search">
+        <!-- search bar and logo -->
+    </div>
+    <div id="create">
+        <a> <!-- href="/task.phtml--> <button id="createTask"> + </button></a>
+    </div>
+    <div class="taskContainer">
+        <?php $displayTasks = $this->view->tasks ?? $this->tasks ?? []; ?>
+
+        <?php if (empty($displayTasks)):  // refers to the View object that is currently rendering the template.
+        ?>
+            <p>All Done! Use "+" button to add a new task.</p>
+        <?php else: ?>
+            <?php foreach ($displayTasks as $task): ?>
+                <div class='taskBox' style="border: 1px solid black; width:200px; height:200px;" ;>
+                    <h3><?php echo htmlspecialchars($task['name']); ?></h3>
+                    <p><?php echo htmlspecialchars($task['description']); ?></p>
+                    <p><?php echo htmlspecialchars($task['created_at']); ?></p>
+
+                    <?php /*
+                    <p>Status: <?php echo $task['status']; // need to add status to 'task'
+                                ?></p>*/ ?>
+                    <a id="editTask" action='update.phtml'><button>edit</button></a> <!-- find edit logo -->
+                    <a id="deleteTask" href="delete?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">
+                        <button>delete</button></a> <!-- find bin logo / add pop-up box: are you sure?-->
+
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+
+    </div>
+    </div>
+</body>
+
+</html>
