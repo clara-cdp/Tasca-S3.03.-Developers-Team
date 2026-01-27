@@ -13,7 +13,7 @@
         <!-- search bar and logo -->
     </div>
     <div id="create">
-        <a> <!-- href="/task.phtml--> <button id="createTask"> + </button></a>
+        <a href="<?= WEB_ROOT ?>/create"> <button id="createTask"> + </button></a>
     </div>
     <div class="taskContainer">
         <?php $displayTasks = $this->view->tasks ?? $this->tasks ?? []; ?>

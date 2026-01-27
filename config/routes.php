@@ -12,6 +12,9 @@
 $routes = array(
 	'/test' => 'test#index', // default test page
 	'/home' => 'task#home', // main page
+	'/create' => 'task#create',
+	'/savetask' => 'task#savetask',
+
 
 	//'/delete'  => 'task#delete',
 

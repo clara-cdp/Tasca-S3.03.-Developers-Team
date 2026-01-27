@@ -1,6 +1,6 @@
 <?php
 
-class Taskcontroller extends Controller
+class TaskController extends ApplicationController
 {
 
     public function homeAction()
@@ -10,6 +10,16 @@ class Taskcontroller extends Controller
         $allTasks = $model->getAllTasks(); // go to json 
 
         $this->view->tasks = $allTasks;
+    }
+
+    public function createAction() {}
+
+    public function savetaskAction()
+    {
+        $model = new TaskModel();
+        $model->saveTask();
+        header("Location: " . WEB_ROOT . "/home");
+        exit;
     }
 
     public function deleteAction()
