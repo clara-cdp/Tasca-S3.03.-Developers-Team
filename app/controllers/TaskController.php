@@ -1,6 +1,6 @@
 <?php
 
-class Taskcontroller extends Controller
+class Taskcontroller extends ApplicationController
 {
 
     public function homeAction()
