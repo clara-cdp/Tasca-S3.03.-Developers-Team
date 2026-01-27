@@ -32,8 +32,8 @@
                     <p>Status: <?php echo $task['status']; // need to add status to 'task'
                                 ?></p>*/ ?>
                     <a id="editTask" action='update.phtml'><button>edit</button></a> <!-- find edit logo -->
-                    <a id="deleteTask" href="delete?id=<?php echo $task['id']; //This inserts the specific ID of the task from your JSON
-                                                        ?>"><button>delete</button></a> <!-- find bin logo / add pop-up box: are you sure?-->
+                    <a id="deleteTask" href="delete?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">
+                        <button>delete</button></a> <!-- find bin logo / add pop-up box: are you sure?-->
 
                 </div>
             <?php endforeach; ?>
