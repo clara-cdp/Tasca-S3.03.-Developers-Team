@@ -19,15 +19,14 @@ class TaskModel extends Model
 
         // ** DEBUG: See if the file exists 
         //var_dump("Looking for file at: " . $this->jsonFile);
-        //var_dump("File exists? " . (file_exists($this->jsonFile) ? 'YES' : 'NO'));
-
+        var_dump("File exists? " . (file_exists($this->jsonFile) ? 'YES' : 'NO'));
 
         $jsonContent = file_get_contents($this->jsonFile); //exiting PHP functions -> retrieves a string
         $data = json_decode($jsonContent, true); // existing PHP function  -> decodes THE string 
         // true: turns the string into and array  -> $task['name']
 
         // ** DEBUG: See what PHP actually thinks the data looks like
-        // var_dump($data);
+        //var_dump($data);
 
         return isset($data['tasks']) ? $data['tasks'] : [];
 
@@ -39,7 +38,6 @@ class TaskModel extends Model
 
     public function deleteTask($id)
     {
-
         $jsonContent = file_get_contents($this->jsonFile);
         $data = json_decode($jsonContent, true);
 
@@ -53,5 +51,19 @@ class TaskModel extends Model
         $data['tasks'] = array_values($data['tasks']); //reset values
 
         file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT)); //save to file
+    }
+
+    public function searchTasks($keyWord)
+    {
+        $jsonContent = file_get_contents($this->jsonFile);
+        $data = json_decode($jsonContent, true);
+
+        $filteredTasks = [];
+        foreach ($data['data'] as $key => $task) {
+            if (stripos($task['title'], $keyWord) !== false) {
+                $filteredTasks[] = $task;
+            }
+        }
+        return $filteredTasks;
     }
 }

@@ -9,14 +9,10 @@
  * '/' => 'index#index',
  * '/calendar' => 'calendar#index'
  */
+
 $routes = array(
 	'/test' => 'test#index', // default test page
 	'/home' => 'task#home', // main page
-
-	//'/delete'  => 'task#delete',
-
-	//'delete'   => 'task#delete',
-
-	'/web/index.php/delete' => 'task#delete'
-
+	'/delete'  => 'task#delete',
+	'/search' => 'task#search'
 );
