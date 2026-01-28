@@ -22,8 +22,17 @@ class Taskcontroller extends ApplicationController
 
     public function savetaskAction()
     {
+        $newTask = [
+            'id'       => null,
+            'name'       => trim($_POST['name']),
+            'description' => trim($_POST['description']),
+            'user'        => trim($_POST['user']),
+            'created_at'  => date('Y-m-d H:i:s'),
+            'state' => 'pending'
+        ];
+
         $model = new TaskModel();
-        $model->saveTask();
+        $model->saveTask($newTask);
         header("Location: " . WEB_ROOT . "/home");
         exit;
     }
