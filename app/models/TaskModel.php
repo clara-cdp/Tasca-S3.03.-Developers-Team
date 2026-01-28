@@ -36,6 +36,24 @@ class TaskModel extends Model
         return [];
     }
 
+    public function saveTask()
+    {
+        $jsonContent = file_get_contents($this->jsonFile);
+        $data = json_decode($jsonContent, true);
+
+        $newTask = [
+            'id'          => $this->generateId($data['tasks']),
+            'name'       => $_POST['name'],
+            'description' => $_POST['description'],
+            'user'        => $_POST['user'],
+            'created_at'  => date('Y-m-d H:i:s'),
+            'state' => 'pending'
+        ];
+
+        $data['tasks'][] = $newTask;
+        file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT));
+    }
+
     public function deleteTask($id)
     {
         $jsonContent = file_get_contents($this->jsonFile);
@@ -68,5 +86,15 @@ class TaskModel extends Model
         }
 
         return $filteredTasks;
+    }
+
+    private function generateId($tasks)
+    {
+        if (empty($tasks)) {
+            return 1;
+        }
+
+        $lastTask = end($tasks);
+        return $lastTask['id'] + 1;
     }
 }

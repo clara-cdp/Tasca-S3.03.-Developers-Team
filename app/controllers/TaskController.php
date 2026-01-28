@@ -1,6 +1,7 @@
 <?php
 
 class Taskcontroller extends ApplicationController
+
 {
     public function homeAction()
     {
@@ -15,6 +16,16 @@ class Taskcontroller extends ApplicationController
             $this->view->tasks = $model->getAllTasks(); //shows all
             $this->view->isSearch = false;
         }
+    }
+
+    public function createAction() {}
+
+    public function savetaskAction()
+    {
+        $model = new TaskModel();
+        $model->saveTask();
+        header("Location: " . WEB_ROOT . "/home");
+        exit;
     }
 
     public function deleteAction()
