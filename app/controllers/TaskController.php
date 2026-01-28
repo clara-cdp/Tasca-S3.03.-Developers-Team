@@ -9,10 +9,10 @@ class Taskcontroller extends ApplicationController
         $keyWord = $_POST['keyWord'] ?? null;
 
         if ($keyWord) {
-            $this->view->tasks = $model->searchTasks($keyWord);
+            $this->view->tasks = $model->searchTasks($keyWord); //shows filtered
             $this->view->isSearch = true;
         } else {
-            $this->view->tasks = $model->getAllTasks();
+            $this->view->tasks = $model->getAllTasks(); //shows all
             $this->view->isSearch = false;
         }
     }
@@ -33,20 +33,5 @@ class Taskcontroller extends ApplicationController
         $keyWord = $_POST['keyWord'] ?? '';
 
         $model = new TaskModel();
-
-        if (!empty($keyWord)) {
-            // 2. The Model does the heavy lifting
-            $results = $model->searchTasks($keyWord);
-            $this->view->tasks = $results;
-        } else {
-            // 3. If they searched for nothing, just show everything
-            $this->view->tasks = $model->getAllTasks();
-        }
-
-
-        //header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
-        //exit;
-
-
     }
 }

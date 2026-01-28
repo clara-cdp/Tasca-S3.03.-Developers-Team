@@ -33,7 +33,7 @@ class TaskModel extends Model
         if (isset($data['tasks'])) {
             return $data['tasks'];
         }
-        return []; // Return empty if 'tasks' key isn't found
+        return [];
     }
 
     public function deleteTask($id)
@@ -48,19 +48,13 @@ class TaskModel extends Model
             }
         }
 
-        $data['tasks'] = array_values($data['tasks']); //reset values
+        $data['tasks'] = array_values($data['tasks']); //reset values --> no it doesn't? does it really matter at all? 
 
         file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT)); //save to file
     }
 
     public function searchTasks($keyWord)
     {
-        //$jsonContent = file_get_contents($this->jsonFile);
-        //$data = json_decode($jsonContent, true);
-
-        // ** DEBUG: See what PHP actually thinks the data looks like
-        //var_dump($data);
-
         $allTasks = $this->getAllTasks();
 
         $filteredTasks = [];
@@ -72,6 +66,7 @@ class TaskModel extends Model
                 $filteredTasks[] = $task;
             }
         }
+
         return $filteredTasks;
     }
 }

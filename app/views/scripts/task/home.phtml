@@ -10,25 +10,34 @@
 <body>
     <h1>Ta-Da! </h1>
 
-    <form action="home" method="POST">
-        <input type="text" name="keyWord">
-        <input type="submit" value="search">
-    </form>
-    <form action="home" method="POST">
-        <input type="submit" value="viewAll">
-    </form>
-
     <div id="create">
         <a> <!-- href="/task.phtml--> <button id="createTask"> + </button></a>
     </div>
 
+    <form action="home" method="POST">
+        <input type="text" name="keyWord">
+        <input type="submit" value="search">🔍 <!-- TODO: press search twice -> error / goes to view all -->
+    </form>
+
+    <a href="home" style="text-decoration: none;">View all tasks</a>
+
     <div class="taskContainer">
+
 
         <?php $displayTasks = $this->view->tasks ?? $this->tasks ?? []; ?>
 
-        <?php if (empty($displayTasks)):  // refers to the View object that is currently rendering the template.
+        <!-- todo: if search comes up empty message ALERT class-->
+        <?php if (empty($displayTasks)): // & (isset($this->view->search)): 
+        ?>
+            <div class="alert">
+                <p>No tasks found... try again!</p>
+            </div>
+        <?php endif; ?>
+
+        <?php if (empty($displayTasks)):
         ?>
             <p>All Done! Use " +" button to add a new task.</p>
+
         <?php else: ?>
             <?php foreach ($displayTasks as $task): ?>
                 <div class='taskBox' style="border: 1px solid black; width:200px; height:200px;" ;>
@@ -39,9 +48,11 @@
                     <?php /*
                     <p>Status: <?php echo $task['status']; // need to add status to 'task'
                                 ?></p>*/ ?>
-                    <a action='update.phtml'><button>edit</button></a> <!-- find edit logo -->
+                    <a action='update.phtml'><button>✏️</button></a>
+                    <!-- TODO: find edit logo -->
                     <a href="delete?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">
-                        <button>delete</button></a> <!-- find bin logo / add pop-up box: are you sure?-->
+                        <button>🗑️</button></a>
+                    <!-- TODO: find bin logo / add pop-up box: are you sure?-->
 
                 </div>
             <?php endforeach; ?>
