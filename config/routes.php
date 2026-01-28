@@ -9,17 +9,13 @@
  * '/' => 'index#index',
  * '/calendar' => 'calendar#index'
  */
+
 $routes = array(
 	'/test' => 'test#index', // default test page
 	'/home' => 'task#home', // main page
+	'/seacrh' => 'task#search',
+	'/delete' => 'task#delete',
 	'/create' => 'task#create',
-	'/savetask' => 'task#savetask',
-
-
-	//'/delete'  => 'task#delete',
-
-	//'delete'   => 'task#delete',
-
-	'/web/index.php/delete' => 'task#delete'
+	'/savetask' => 'task#savetask'
 
 );

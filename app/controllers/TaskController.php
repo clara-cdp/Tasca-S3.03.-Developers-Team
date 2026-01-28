@@ -1,15 +1,21 @@
 <?php
 
-class TaskController extends ApplicationController
-{
+class Taskcontroller extends ApplicationController
 
+{
     public function homeAction()
     {
         $model = new TaskModel();
 
-        $allTasks = $model->getAllTasks(); // go to json 
+        $keyWord = $_POST['keyWord'] ?? null;
 
-        $this->view->tasks = $allTasks;
+        if ($keyWord) {
+            $this->view->tasks = $model->searchTasks($keyWord); //shows filtered
+            $this->view->isSearch = true;
+        } else {
+            $this->view->tasks = $model->getAllTasks(); //shows all
+            $this->view->isSearch = false;
+        }
     }
 
     public function createAction() {}
@@ -31,5 +37,12 @@ class TaskController extends ApplicationController
 
         header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
         exit;
+    }
+
+    public function searchAction()
+    {
+        $keyWord = $_POST['keyWord'] ?? '';
+
+        $model = new TaskModel();
     }
 }

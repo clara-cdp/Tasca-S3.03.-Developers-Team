@@ -21,20 +21,19 @@ class TaskModel extends Model
         //var_dump("Looking for file at: " . $this->jsonFile);
         //var_dump("File exists? " . (file_exists($this->jsonFile) ? 'YES' : 'NO'));
 
-
         $jsonContent = file_get_contents($this->jsonFile); //exiting PHP functions -> retrieves a string
         $data = json_decode($jsonContent, true); // existing PHP function  -> decodes THE string 
         // true: turns the string into and array  -> $task['name']
 
         // ** DEBUG: See what PHP actually thinks the data looks like
-        // var_dump($data);
+        //var_dump($data);
 
         return isset($data['tasks']) ? $data['tasks'] : [];
 
         if (isset($data['tasks'])) {
             return $data['tasks'];
         }
-        return []; // Return empty if 'tasks' key isn't found
+        return [];
     }
 
     public function saveTask()
@@ -57,7 +56,6 @@ class TaskModel extends Model
 
     public function deleteTask($id)
     {
-
         $jsonContent = file_get_contents($this->jsonFile);
         $data = json_decode($jsonContent, true);
 
@@ -68,9 +66,26 @@ class TaskModel extends Model
             }
         }
 
-        $data['tasks'] = array_values($data['tasks']); //reset values
+        $data['tasks'] = array_values($data['tasks']); //reset values --> no it doesn't? does it really matter at all? 
 
         file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT)); //save to file
+    }
+
+    public function searchTasks($keyWord)
+    {
+        $allTasks = $this->getAllTasks();
+
+        $filteredTasks = [];
+        foreach ($allTasks as $task) {
+            if (
+                stripos($task['name'], $keyWord) !== false ||
+                stripos($task['description'], $keyWord) !== false
+            ) {
+                $filteredTasks[] = $task;
+            }
+        }
+
+        return $filteredTasks;
     }
 
     private function generateId($tasks)
