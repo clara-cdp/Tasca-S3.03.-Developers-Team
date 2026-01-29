@@ -1,12 +1,12 @@
 {
     "tasks": [
         {
-            "id": 1,
-            "name": "a1",
-            "description": "42",
-            "user": "aa",
-            "created_at": "2026-01-28 12:51:25",
-            "state": "pending"
+            "id": "1",
+            "name": "aksjdkajsf",
+            "description": "2333333",
+            "user": "funciona",
+            "created_at": "2026-01-28 12:58:49",
+            "state": "finished"
         },
         {
             "id": 2,
@@ -15,6 +15,14 @@
             "user": "4444",
             "created_at": "2026-01-28 12:58:49",
             "state": "pending"
+        },
+        {
+            "id": "3",
+            "name": "prueba2",
+            "description": "descripcion1",
+            "user": "username1",
+            "created_at": "2026-01-29 13:33:07",
+            "state": "ongoing"
         }
     ]
 }

@@ -1,0 +1,33 @@
+<h1>Update New Task</h1>
+
+<form action="<?= WEB_ROOT ?>/updatetask?id=<?= htmlspecialchars($this->task['id']) ?>" method="POST">
+  <div>
+    <label for="name">Name</label><br>
+    <input type="text" id="name" name="name" required value="<?= htmlspecialchars($this->task['name']) ?>">
+  </div>
+
+  <div>
+    <label for="description">Description</label><br>
+    <textarea id="description" name="description" rows="4" required><?= htmlspecialchars($this->task['description']) ?></textarea>
+  </div>
+
+  <div>
+    <label for="user">Username</label><br>
+    <input type="text" id="user" name="user" required value="<?= htmlspecialchars($this->task['user']) ?>">
+  </div>
+  <div>
+    <select name="state">
+      <?= $state = htmlspecialchars($this->task['state']) ?>
+      <option value="pending" <?= $state === 'pending'  ? 'selected' : '' ?>>Pending</option>
+      <option value="ongoing" <?= $state === 'ongoing' ? 'selected' : '' ?>>Ongoing</option>
+      <option value="finished" <?= $state === 'finished' ? 'selected' : '' ?>>Finished</option>
+    </select>
+  </div>
+  <button type="submit">Save</button>
+</form>
+
+<p>
+  <a href="<?= WEB_ROOT ?>/home">
+    Return
+  </a>
+</p>
