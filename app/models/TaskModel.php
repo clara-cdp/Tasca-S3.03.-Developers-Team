@@ -90,7 +90,7 @@ class TaskModel extends Model
             }
         }
 
-        $data['tasks'] = array_values($data['tasks']); //reset values --> no it doesn't? does it really matter at all? 
+       // $data['tasks'] = array_values($data['tasks']); //reset values --> no it doesn't? does it really matter at all? 
 
         file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT)); //save to file
     }

@@ -7,10 +7,12 @@ class Taskcontroller extends ApplicationController
     {
         $model = new TaskModel();
 
-        $keyWord = $_POST['keyWord'] ?? null;
+        $keyWord = $_POST['keyWord'] ?? '';
 
-        if ($keyWord) {
-            $this->view->tasks = $model->searchTasks($keyWord); //shows filtered
+        $cleanKeyWord = $this->clean_input($keyWord);
+
+        if ($cleanKeyWord) {
+            $this->view->tasks = $model->searchTasks($cleanKeyWord); //shows filtered
             $this->view->isSearch = true;
         } else {
             $this->view->tasks = $model->getAllTasks(); //shows all
@@ -76,5 +78,15 @@ class Taskcontroller extends ApplicationController
         $keyWord = $_POST['keyWord'] ?? '';
 
         $model = new TaskModel();
+    }
+
+
+    //move this function to the "right place" 
+    function clean_input($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
     }
 }
