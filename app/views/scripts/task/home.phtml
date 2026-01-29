@@ -42,8 +42,10 @@
                     <h3><?php echo htmlspecialchars($task['name']); ?></h3>
                     <p><?php echo htmlspecialchars($task['description']); ?></p>
                     <p><?php echo htmlspecialchars($task['created_at']); ?></p>
-
-                    <br><a action='update.phtml'><button>✏️</button></a>
+                    <?php /*
+                    <p>Status: <?php echo $task['status']; // need to add status to 'task'
+                                ?></p>*/ ?>
+                    <a href="update?id=<?php echo $task['id']; ?>"><button>✏️</button></a>
                     <!-- TODO: find edit logo -->
                     <a href="delete?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">
                         <button>🗑️</button></a>
