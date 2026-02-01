@@ -40,6 +40,16 @@ class TaskModel extends Model
         file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT));
     }
 
+    private function generateId($tasks)
+    {
+        if (empty($tasks)) {
+            return 1;
+        }
+
+        $lastTask = end($tasks);
+        return $lastTask['id'] + 1;
+    }
+
     public function deleteTask($id)
     {
         $jsonContent = file_get_contents($this->jsonFile);
@@ -65,7 +75,8 @@ class TaskModel extends Model
         foreach ($allTasks as $task) {
             if (
                 stripos($task['name'], $keyWord) !== false ||
-                stripos($task['description'], $keyWord) !== false
+                stripos($task['description'], $keyWord) !== false ||
+                stripos($task['user'], $keyWord) !== false
             ) {
                 $filteredTasks[] = $task;
             }
@@ -74,22 +85,28 @@ class TaskModel extends Model
         return $filteredTasks;
     }
 
-    private function generateId($tasks)
+    public function sortByState($state)
     {
-        if (empty($tasks)) {
-            return 1;
-        }
+        $allTasks = $this->getAllTasks();
 
-        $lastTask = end($tasks);
-        return $lastTask['id'] + 1;
+        $filteredByState = [];
+
+        foreach ($allTasks as $task) {
+            if ($task['state'] == $state)
+                $filteredByState[] = $task;
+        }
+        return $filteredByState;
     }
 
-    public function  getTaskStatus()
+    public function sortByDate($date)
     {
-        // $jsonContent = file_get_contents($this->jsonFile);
-        // $data = json_decode($jsonContent, true);
-        if (isset($_POST['submit'])) {
-            return "okey Dokey";
+        $allTasks = $this->getAllTasks();
+        $sortedbyOld = array_reverse($allTasks);
+
+        if ($date == "old") {
+            return $sortedbyOld;
+        } else {
+            return $allTasks;
         }
     }
 }

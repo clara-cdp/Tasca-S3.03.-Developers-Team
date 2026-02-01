@@ -8,19 +8,31 @@ class Taskcontroller extends ApplicationController
         $model = new TaskModel();
 
         $keyWord = $_POST['keyWord'] ?? '';
+        $status = $_REQUEST['status'] ?? '';
+        $date = $_REQUEST['date'] ?? 'new'; // Default to newest
 
         $cleanKeyWord = $this->clean_input($keyWord);
 
         if ($cleanKeyWord) {
             $this->view->tasks = $model->searchTasks($cleanKeyWord); //shows filtered
-            $this->view->isSearch = true;
+        } elseif ($status) {
+            $this->view->tasks = $model->sortByState($status);
+        } elseif ($date !== 'new') {
+            $this->view->tasks = $model->sortByDate($date);
         } else {
-            $this->view->tasks = $model->getAllTasks(); //shows all
-            $this->view->isSearch = false;
+            $this->view->tasks = $model->getAllTasks();
         }
+
+        $this->view->isSearch = ($cleanKeyWord || $status || $date !== 'new');
+
+        $this->view->displayMenu = true; //displays menu
+
     }
 
-    public function createAction() {}
+    public function createAction()
+    {
+        $this->view->displayMenu = false; // not displaying menu
+    }
 
     public function savetaskAction()
     {
@@ -43,7 +55,7 @@ class Taskcontroller extends ApplicationController
     {
         $idToDelete = $_GET['id'];
 
-        $model = new TaskModel(); // go to json and remove it
+        $model = new TaskModel();           // go to json and remove it
         $model->deleteTask($idToDelete);
 
         header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
