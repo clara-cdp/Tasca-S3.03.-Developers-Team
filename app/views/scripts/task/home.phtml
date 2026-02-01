@@ -71,7 +71,8 @@
 
                     <!-- * **********************************************************-->
                     <hr>
-                    <a action='update.phtml'><button>✏️</button></a> <!-- ADD action -->
+                    
+                    <a href="update?id=<?php echo $task['id']; ?>"><button>✏️</button></a>
                     <!-- TODO: find edit logo -->
 
                     <a href="delete?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">

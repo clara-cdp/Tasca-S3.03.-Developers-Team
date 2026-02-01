@@ -62,6 +62,29 @@ class Taskcontroller extends ApplicationController
         exit;
     }
 
+    public function updateAction()
+    {
+        $model = new TaskModel();
+        $task = $model->getTask($_GET['id']);
+        $this->view->task = $task;
+    }
+
+    public function updatetaskAction()
+    {
+        $updatedTask = [
+            'id'       => trim($_GET['id']),
+            'name'       => trim($_POST['name']),
+            'description' => trim($_POST['description']),
+            'user'        => trim($_POST['user']),
+            'state' => trim($_POST['state'])
+        ];
+
+        $model = new TaskModel();
+        $model->updateTask($updatedTask);
+        header("Location: " . WEB_ROOT . "/home");
+        exit;
+    }
+
     public function searchAction()
     {
         $keyWord = $_POST['keyWord'] ?? '';
