@@ -1,19 +1,59 @@
 {
     "tasks": [
         {
-            "id": "1",
-            "name": "aksjdkajsf",
-            "description": "2333333",
-            "user": "funciona",
-            "created_at": "2026-01-28 12:58:49",
-            "state": "finished"
+            "id": 1,
+            "name": "Feed the AI",
+            "description": "Give Gemini some high-quality data for breakfast.",
+            "user": "clara",
+            "created_at": "2026-01-26T10:00:00Z",
+            "state": "pending"
         },
         {
             "id": 2,
-            "name": "444",
-            "description": "444",
-            "user": "4444",
-            "created_at": "2026-01-28 12:58:49",
+            "name": "Debug the Ghost",
+            "description": "Find that one missing semicolon that's been hiding for three hours.",
+            "user": "clara",
+            "created_at": "2026-01-26T11:00:00Z",
+            "state": "ongoing"
+        },
+        {
+            "id": 3,
+            "name": "Coffee Run",
+            "description": "Crucial mission to maintain code productivity levels.",
+            "user": "clara",
+            "created_at": "2026-01-26T12:00:00Z",
+            "state": "finished"
+        },
+        {
+            "id": 4,
+            "name": "JSON Cleanup",
+            "description": "Verify that all curly braces are properly aligned and happy.",
+            "user": "clara",
+            "created_at": "2026-01-26T13:00:00Z",
+            "state": "pending"
+        },
+        {
+            "id": 5,
+            "name": "Final Boss: The Router",
+            "description": "Defeat the 'No route added' error once and for all.",
+            "user": "clara",
+            "created_at": "2026-01-26T14:00:00Z",
+            "state": "pending"
+        },
+        {
+            "id": 6,
+            "name": "feed the dragons",
+            "description": "Shenron eats rice,\r\nFalkor is veggie!",
+            "user": "mari pili",
+            "created_at": "2026-01-28 20:23:24",
+            "state": "pending"
+        },
+        {
+            "id": 7,
+            "name": "play trouble",
+            "description": "I am red, always red!",
+            "user": "clara",
+            "created_at": "2026-01-28 20:44:19",
             "state": "pending"
         },
         {

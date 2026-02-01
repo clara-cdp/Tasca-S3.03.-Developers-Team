@@ -8,7 +8,25 @@
 </head>
 
 <body>
-    <h1>Ta-Da! </h1>
+
+    <nav class=menu>
+        <form action="<?= WEB_ROOT ?>/home" method="GET" class="displayMenu">
+
+            <h3>View Tasks:</h3>
+
+            <button type="submit" name="date" value="old">Sort by Oldest</button>
+            <button type="submit" name="date" value="new">Sort by Newest</button><br><br>
+
+
+            <button type="submit" name="status" value="pending">Pending</button>
+            <button type="submit" name="status" value="ongoing">Ongoing</button>
+            <button type="submit" name="status" value="finished">Finished</button><br><br>
+
+            <a href="<?= WEB_ROOT ?>/home">Reset Filters</a><br>
+
+            <hr>
+        </form>
+    </nav>
 
     <div id="create">
         <a href="<?= WEB_ROOT ?>/create"> <button id="createTask"> + </button></a>
@@ -16,13 +34,10 @@
 
     <form action="home" method="POST">
         <input type="text" name="keyWord">
-        <input type="submit" value="search">🔍 <!-- TODO: press search twice -> error / goes to view all -->
+        <input type="submit" value="search">🔍
     </form>
 
-    <a href="home" style="text-decoration: none;">View all tasks</a>
-
     <div class="taskContainer">
-
 
         <?php $displayTasks = $this->view->tasks ?? $this->tasks ?? [];
         $isSearch = $this->view->isSearch ?? $this->isSearch ?? false; ?>
@@ -30,7 +45,6 @@
         <?php if (empty($displayTasks)): ?>
 
             <?php if ($isSearch): ?>
-
                 <p>⚠️ No tasks found... Try again!</p>
             <?php else: ?>
                 <p>✅ All Done! Use the "+" button to add a new task.</p>
@@ -38,18 +52,32 @@
 
         <?php else: ?>
             <?php foreach ($displayTasks as $task): ?>
-                <div class='taskBox' style="border: 1px solid black; width:200px; height:wrap; padding:3px;" ;>
+                <div class='taskBox' style="border: 1px solid black; width:200px; height:wrap; padding:5px" ;>
                     <h3><?php echo htmlspecialchars($task['name']); ?></h3>
                     <p><?php echo htmlspecialchars($task['description']); ?></p>
                     <p><?php echo htmlspecialchars($task['created_at']); ?></p>
-                    <?php /*
-                    <p>Status: <?php echo $task['status']; // need to add status to 'task'
-                                ?></p>*/ ?>
+                    <p><?php echo htmlspecialchars($task['user']); ?></p>
+
+
+                    <!-- Add  here *********************-->
+
+                    <form action="home" method="POST">
+
+                        <?php echo  htmlspecialchars($task['state']); ?><br>
+
+                        <a href="changeState?id"> <input type="button" name="ongoing" value="change to Ongoing"></a><br>
+                        <a href="changeState?id"><input type="button" name="finished" value="change to finished"></a>
+                    </form>
+
+                    <!-- * **********************************************************-->
+                    <hr>
+                    
                     <a href="update?id=<?php echo $task['id']; ?>"><button>✏️</button></a>
                     <!-- TODO: find edit logo -->
+
                     <a href="delete?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">
                         <button>🗑️</button></a>
-                    <!-- TODO: find bin logo-->
+                    <!-- TODO: find bin logo / add pop-up box: are you sure?-->
 
                 </div>
             <?php endforeach; ?>

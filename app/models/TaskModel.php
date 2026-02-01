@@ -2,7 +2,6 @@
 
 class TaskModel extends Model
 {
-
     protected $jsonFile = ROOT_PATH . '/app/models/tasks.json';
 
     public function __construct()
@@ -17,22 +16,17 @@ class TaskModel extends Model
             return [];
         }
 
-        // ** DEBUG: See if the file exists 
-        //var_dump("Looking for file at: " . $this->jsonFile);
-        //var_dump("File exists? " . (file_exists($this->jsonFile) ? 'YES' : 'NO'));
+        $jsonContent = file_get_contents($this->jsonFile);
+        $data = json_decode($jsonContent, true);
 
-        $jsonContent = file_get_contents($this->jsonFile); //exiting PHP functions -> retrieves a string
-        $data = json_decode($jsonContent, true); // existing PHP function  -> decodes THE string 
-        // true: turns the string into and array  -> $task['name']
+        $tasks = isset($data['tasks']) ? $data['tasks'] : [];
 
-        // ** DEBUG: See what PHP actually thinks the data looks like
-        //var_dump($data);
-
-        return isset($data['tasks']) ? $data['tasks'] : [];
+        return array_reverse($tasks);  //shows tasks by newest first  ;)
 
         if (isset($data['tasks'])) {
             return $data['tasks'];
         }
+
         return [];
     }
 
@@ -63,6 +57,17 @@ class TaskModel extends Model
         file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT));
     }
 
+    private function generateId($tasks)
+    {
+        if (empty($tasks)) {
+            return 1;
+        }
+
+        $lastTask = end($tasks);
+        return $lastTask['id'] + 1;
+      
+    }
+  
     public function updateTask($updatedTask): void
     {
         $jsonContent = file_get_contents($this->jsonFile);
@@ -90,7 +95,7 @@ class TaskModel extends Model
             }
         }
 
-       // $data['tasks'] = array_values($data['tasks']); //reset values --> no it doesn't? does it really matter at all? 
+        $data['tasks'] = array_values($data['tasks']); //reset values --> no it doesn't? does it really matter at all? 
 
         file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT)); //save to file
     }
@@ -103,7 +108,8 @@ class TaskModel extends Model
         foreach ($allTasks as $task) {
             if (
                 stripos($task['name'], $keyWord) !== false ||
-                stripos($task['description'], $keyWord) !== false
+                stripos($task['description'], $keyWord) !== false ||
+                stripos($task['user'], $keyWord) !== false
             ) {
                 $filteredTasks[] = $task;
             }
@@ -111,13 +117,29 @@ class TaskModel extends Model
 
         return $filteredTasks;
     }
-    private function generateId($tasks)
-    {
-        if (empty($tasks)) {
-            return 1;
-        }
 
-        $lastTask = end($tasks);
-        return $lastTask['id'] + 1;
+    public function sortByState($state)
+    {
+        $allTasks = $this->getAllTasks();
+
+        $filteredByState = [];
+
+        foreach ($allTasks as $task) {
+            if ($task['state'] == $state)
+                $filteredByState[] = $task;
+        }
+        return $filteredByState;
+    }
+
+    public function sortByDate($date)
+    {
+        $allTasks = $this->getAllTasks();
+        $sortedbyOld = array_reverse($allTasks);
+
+        if ($date == "old") {
+            return $sortedbyOld;
+        } else {
+            return $allTasks;
+        }
     }
 }
