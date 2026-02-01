@@ -30,6 +30,23 @@ class TaskModel extends Model
         return [];
     }
 
+    public function getTask($id)
+    {
+        $jsonContent = file_get_contents($this->jsonFile);
+        $data = json_decode($jsonContent, true);
+
+        if (!isset($data['tasks'])) {
+            return null;
+        }
+
+        foreach ($data['tasks'] as $task) {
+            if ((int)$task['id'] === (int)$id) {
+                return $task;
+            }
+        }
+        return null;
+    }
+
     public function saveTask($newTask)
     {
         $jsonContent = file_get_contents($this->jsonFile);
@@ -37,6 +54,21 @@ class TaskModel extends Model
 
         $newTask['id'] = $this->generateId($data['tasks']);
         $data['tasks'][] = $newTask;
+        file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT));
+    }
+
+    public function updateTask($updatedTask): void
+    {
+        $jsonContent = file_get_contents($this->jsonFile);
+        $data = json_decode($jsonContent, true);
+
+        foreach ($data['tasks'] as $index => $task) {
+            if ((int)$task['id'] === (int)$updatedTask['id']) {
+                $currentTask = $this->getTask($updatedTask['id']);
+                $data['tasks'][$index] = array_merge($currentTask, $updatedTask);
+                break;
+            }
+        }
         file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT));
     }
 
