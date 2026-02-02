@@ -1,12 +1,12 @@
 {
     "tasks": [
         {
-            "id": "1",
-            "name": "aksjdkajsf",
-            "description": "2333333",
-            "user": "funciona",
-            "created_at": "2026-01-28 12:58:49",
-            "state": "finished"
+            "id": 1,
+            "name": "Feed the AI",
+            "description": "Give Gemini some high-quality data for breakfast.",
+            "user": "clara",
+            "created_at": "2026-01-26T10:00:00Z",
+            "state": "pending"
         },
         {
             "id": 2,
