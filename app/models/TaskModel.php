@@ -122,4 +122,13 @@ class TaskModel extends Model
             json_encode($data, JSON_PRETTY_PRINT)
         );
     }
+
+    public function  getTaskStatus()
+    {
+        // $jsonContent = file_get_contents($this->jsonFile);
+        // $data = json_decode($jsonContent, true);
+        if (isset($_POST['submit'])) {
+            return "okey Dokey";
+        }
+    }
 }
