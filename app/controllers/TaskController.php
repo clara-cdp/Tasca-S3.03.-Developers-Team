@@ -8,16 +8,22 @@ class Taskcontroller extends ApplicationController
         $model = new TaskModel();
 
         $keyWord = $_POST['keyWord'] ?? '';
+        $status = $_REQUEST['status'] ?? '';
+        $date = $_REQUEST['date'] ?? 'new'; // Default to newest
 
         $cleanKeyWord = $this->clean_input($keyWord);
 
         if ($cleanKeyWord) {
             $this->view->tasks = $model->searchTasks($cleanKeyWord); //shows filtered
-            $this->view->isSearch = true;
+        } elseif ($status) {
+            $this->view->tasks = $model->sortByState($status);
+        } elseif ($date !== 'new') {
+            $this->view->tasks = $model->sortByDate($date);
         } else {
-            $this->view->tasks = $model->getAllTasks(); //shows all
-            $this->view->isSearch = false;
+            $this->view->tasks = $model->getAllTasks();
         }
+
+        $this->view->isSearch = ($cleanKeyWord || $status || $date !== 'new');
     }
 
     public function createAction() {}
@@ -30,7 +36,8 @@ class Taskcontroller extends ApplicationController
             'description' => trim($_POST['description']),
             'user'        => trim($_POST['user']),
             'created_at'  => date('Y-m-d H:i:s'),
-            'state' => 'pending'
+            'state'  => TaskState::PENDING->value   //updated this to status ENUM
+
         ];
 
         $model = new TaskModel();
@@ -43,7 +50,7 @@ class Taskcontroller extends ApplicationController
     {
         $idToDelete = $_GET['id'];
 
-        $model = new TaskModel(); // go to json and remove it
+        $model = new TaskModel();           // go to json and remove it
         $model->deleteTask($idToDelete);
 
         header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
@@ -72,14 +79,19 @@ class Taskcontroller extends ApplicationController
         header("Location: " . WEB_ROOT . "/home");
         exit;
     }
-
-    public function searchAction()
+    /****************************************************************************************** */
+    public function changeStateAction()
     {
-        $keyWord = $_POST['keyWord'] ?? '';
+        $taskID = $_GET['id'];
+        $newState = $_GET['state'];
 
         $model = new TaskModel();
-    }
+        $model->changeState($taskID, $newState);
 
+        header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
+        exit;
+    }
+    /****************************************************************************************** */
 
     //move this function to the "right place" 
     function clean_input($data)
