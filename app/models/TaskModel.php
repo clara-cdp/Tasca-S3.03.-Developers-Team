@@ -10,35 +10,15 @@ class TaskModel extends Model
         // so the app stops looking for a MySQL server.
     }
 
-    public function getAllTasks()
+    public function getAllTasks(): array
     {
-        if (!file_exists($this->jsonFile)) {
-            return [];
-        }
-
-        $jsonContent = file_get_contents($this->jsonFile);
-        $data = json_decode($jsonContent, true);
-
-        $tasks = isset($data['tasks']) ? $data['tasks'] : [];
-
-        return array_reverse($tasks);  //shows tasks by newest first  ;)
-
-        if (isset($data['tasks'])) {
-            return $data['tasks'];
-        }
-
-        return [];
+        $data = $this->readData();
+        return array_reverse($data['tasks']);
     }
 
-    public function getTask($id)
+    public function getTask(int $id): ?array
     {
-        $jsonContent = file_get_contents($this->jsonFile);
-        $data = json_decode($jsonContent, true);
-
-        if (!isset($data['tasks'])) {
-            return null;
-        }
-
+        $data = $this->readData();
         foreach ($data['tasks'] as $task) {
             if ((int)$task['id'] === (int)$id) {
                 return $task;
@@ -47,63 +27,50 @@ class TaskModel extends Model
         return null;
     }
 
-    public function saveTask($newTask)
+    public function saveTask(array $newTask): void
     {
-        $jsonContent = file_get_contents($this->jsonFile);
-        $data = json_decode($jsonContent, true);
-
+        $data = $this->readData();
         $newTask['id'] = $this->generateId($data['tasks']);
         $data['tasks'][] = $newTask;
-        file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT));
+        $this->writeData($data);
     }
 
-    private function generateId($tasks)
+    private function generateId(array $tasks): int
     {
         if (empty($tasks)) {
             return 1;
         }
-
         $lastTask = end($tasks);
         return $lastTask['id'] + 1;
-      
     }
-  
-    public function updateTask($updatedTask): void
-    {
-        $jsonContent = file_get_contents($this->jsonFile);
-        $data = json_decode($jsonContent, true);
 
+    public function updateTask(array $updatedTask): void
+    {
+        $data = $this->readData();
         foreach ($data['tasks'] as $index => $task) {
             if ((int)$task['id'] === (int)$updatedTask['id']) {
-                $currentTask = $this->getTask($updatedTask['id']);
-                $data['tasks'][$index] = array_merge($currentTask, $updatedTask);
+                $data['tasks'][$index] = array_merge($task, $updatedTask);
                 break;
             }
         }
-        file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT));
+        $this->writeData($data);
     }
 
-    public function deleteTask($id)
+    public function deleteTask($id): void
     {
-        $jsonContent = file_get_contents($this->jsonFile);
-        $data = json_decode($jsonContent, true);
-
+        $data = $this->readData();
         foreach ($data['tasks'] as $key => $task) {
             if ($task['id'] == $id) {
                 unset($data['tasks'][$key]);
                 break;
             }
         }
-
-        $data['tasks'] = array_values($data['tasks']); //reset values --> no it doesn't? does it really matter at all? 
-
-        file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT)); //save to file
+        $this->writeData($data);
     }
 
-    public function searchTasks($keyWord)
+    public function searchTasks(string $keyWord): array
     {
         $allTasks = $this->getAllTasks();
-
         $filteredTasks = [];
         foreach ($allTasks as $task) {
             if (
@@ -114,16 +81,13 @@ class TaskModel extends Model
                 $filteredTasks[] = $task;
             }
         }
-
         return $filteredTasks;
     }
 
-    public function sortByState($state)
+    public function sortByState(string $state): array
     {
         $allTasks = $this->getAllTasks();
-
         $filteredByState = [];
-
         foreach ($allTasks as $task) {
             if ($task['state'] == $state)
                 $filteredByState[] = $task;
@@ -131,15 +95,31 @@ class TaskModel extends Model
         return $filteredByState;
     }
 
-    public function sortByDate($date)
+    public function sortByDate(string $date): array
     {
         $allTasks = $this->getAllTasks();
         $sortedbyOld = array_reverse($allTasks);
-
         if ($date == "old") {
             return $sortedbyOld;
         } else {
             return $allTasks;
         }
+    }
+
+    private function readData(): array
+    {
+        if (!file_exists($this->jsonFile)) {
+            return ['tasks' => []];
+        }
+        $content = file_get_contents($this->jsonFile);
+        return json_decode($content, true) ?? ['tasks' => []];
+    }
+
+    private function writeData(array $data): void
+    {
+        file_put_contents(
+            $this->jsonFile,
+            json_encode($data, JSON_PRETTY_PRINT)
+        );
     }
 }
