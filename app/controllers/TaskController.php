@@ -1,12 +1,17 @@
 <?php
 
-class Taskcontroller extends ApplicationController
+class TaskController extends ApplicationController
 
 {
+    private TaskModel $model;
+
+    public function __construct()
+    {
+        $this->model = new TaskModel();
+    }
+
     public function homeAction()
     {
-        $model = new TaskModel();
-
         $keyWord = $_POST['keyWord'] ?? '';
         $status = $_REQUEST['status'] ?? '';
         $date = $_REQUEST['date'] ?? 'new'; // Default to newest
@@ -14,13 +19,13 @@ class Taskcontroller extends ApplicationController
         $cleanKeyWord = $this->clean_input($keyWord);
 
         if ($cleanKeyWord) {
-            $this->view->tasks = $model->searchTasks($cleanKeyWord); //shows filtered
+            $this->view->tasks = $this->model->searchTasks($cleanKeyWord); //shows filtered
         } elseif ($status) {
-            $this->view->tasks = $model->sortByState($status);
+            $this->view->tasks = $this->model->sortByState($status);
         } elseif ($date !== 'new') {
-            $this->view->tasks = $model->sortByDate($date);
+            $this->view->tasks = $this->model->sortByDate($date);
         } else {
-            $this->view->tasks = $model->getAllTasks();
+            $this->view->tasks = $this->model->getAllTasks();
         }
 
         $this->view->isSearch = ($cleanKeyWord || $status || $date !== 'new');
@@ -30,18 +35,17 @@ class Taskcontroller extends ApplicationController
 
     public function savetaskAction()
     {
-        $newTask = [
-            'id'       => null,
-            'name'       => trim($_POST['name']),
-            'description' => trim($_POST['description']),
-            'user'        => trim($_POST['user']),
-            'created_at'  => date('Y-m-d H:i:s'),
-            'state'  => TaskState::PENDING->value   //updated this to status ENUM
 
+        $newTask = [
+            'id' => null,
+            'name' => $this->clean_input($_POST['name'] ?? ''),
+            'description' => $this->clean_input($_POST['description'] ?? ''),
+            'user' => $this->clean_input($_POST['user'] ?? ''),
+            'created_at' => date('Y-m-d H:i:s'),
+            'state'  => TaskState::PENDING->value   //updated this to status ENUM
         ];
 
-        $model = new TaskModel();
-        $model->saveTask($newTask);
+        $this->model->saveTask($newTask);
         header("Location: " . WEB_ROOT . "/home");
         exit;
     }
@@ -50,36 +54,33 @@ class Taskcontroller extends ApplicationController
     {
         $idToDelete = $_GET['id'];
 
-        $model = new TaskModel();           // go to json and remove it
-        $model->deleteTask($idToDelete);
+        $this->model->deleteTask($idToDelete);
 
-        header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
     }
 
     public function updateAction()
     {
-        $model = new TaskModel();
-        $task = $model->getTask($_GET['id']);
+        $task = $this->model->getTask($_GET['id']);
         $this->view->task = $task;
     }
 
     public function updatetaskAction()
     {
         $updatedTask = [
-            'id'       => trim($_GET['id']),
-            'name'       => trim($_POST['name']),
-            'description' => trim($_POST['description']),
-            'user'        => trim($_POST['user']),
-            'state' => trim($_POST['state'])
+            'id'       => (int)$this->clean_input($_GET['id']),
+            'name'       => $this->clean_input($_POST['name']),
+            'description' => $this->clean_input($_POST['description']),
+            'user'        => $this->clean_input($_POST['user']),
+            'state' => $this->clean_input($_POST['state'])
         ];
 
-        $model = new TaskModel();
-        $model->updateTask($updatedTask);
+        $this->model->updateTask($updatedTask);
         header("Location: " . WEB_ROOT . "/home");
         exit;
     }
-    /****************************************************************************************** */
+
     public function changeStateAction()
     {
         $taskID = $_GET['id'];
@@ -90,15 +91,5 @@ class Taskcontroller extends ApplicationController
 
         header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
         exit;
-    }
-    /****************************************************************************************** */
-
-    //move this function to the "right place" 
-    function clean_input($data)
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
     }
 }
