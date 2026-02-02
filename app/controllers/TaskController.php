@@ -29,15 +29,9 @@ class TaskController extends ApplicationController
         }
 
         $this->view->isSearch = ($cleanKeyWord || $status || $date !== 'new');
-
-        $this->view->displayMenu = true; //displays menu
-
     }
 
-    public function createAction()
-    {
-        $this->view->displayMenu = false; // not displaying menu
-    }
+    public function createAction() {}
 
     public function savetaskAction()
     {
@@ -48,7 +42,7 @@ class TaskController extends ApplicationController
             'description' => $this->clean_input($_POST['description'] ?? ''),
             'user' => $this->clean_input($_POST['user'] ?? ''),
             'created_at' => date('Y-m-d H:i:s'),
-            'state' => 'pending'
+            'state'  => TaskState::PENDING->value   //updated this to status ENUM
         ];
 
         $this->model->saveTask($newTask);
@@ -60,10 +54,9 @@ class TaskController extends ApplicationController
     {
         $idToDelete = $_GET['id'];
 
-        // go to json and remove it
         $this->model->deleteTask($idToDelete);
 
-        header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
     }
 
@@ -88,10 +81,15 @@ class TaskController extends ApplicationController
         exit;
     }
 
-    public function searchAction()
+    public function changeStateAction()
     {
-        $keyWord = $_POST['keyWord'] ?? '';
+        $taskID = $_GET['id'];
+        $newState = $_GET['state'];
 
         $model = new TaskModel();
+        $model->changeState($taskID, $newState);
+
+        header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
+        exit;
     }
 }

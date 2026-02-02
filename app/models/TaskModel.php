@@ -49,7 +49,14 @@ class TaskModel extends Model
         $data = $this->readData();
         foreach ($data['tasks'] as $index => $task) {
             if ((int)$task['id'] === (int)$updatedTask['id']) {
+                //  $currentTask = $this->getTask($updatedTask['id']);
+                if ($updatedTask['state'] === TaskState::FINIFSHED->value) { //--> add this: timeStamp to 'finished' state
+                    $updatedTask['finished_at'] = date('Y-m-d H:i:s');
+                } else {
+                    $updatedTask['finished_at'] = null;
+                }
                 $data['tasks'][$index] = array_merge($task, $updatedTask);
+                //  $data['tasks'][$index] = array_merge($currentTask, $updatedTask);
                 break;
             }
         }
@@ -104,6 +111,26 @@ class TaskModel extends Model
         } else {
             return $allTasks;
         }
+    }
+
+    public function changeState($taskID, $newState): void
+    {
+        $jsonContent = file_get_contents($this->jsonFile);
+        $data = json_decode($jsonContent, true);
+
+        foreach ($data['tasks'] as &$task) { // Note the & (reference)
+            if ((int)$task['id'] === (int)$taskID) {
+                $task['state'] = $newState;
+
+                if ($newState === TaskState::FINIFSHED->value) {
+                    $task['finished_at'] = date('Y-m-d H:i:s');
+                } else {
+                    $task['finished_at'] = null;
+                }
+            }
+        }
+
+        file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT));
     }
 
     private function readData(): array
