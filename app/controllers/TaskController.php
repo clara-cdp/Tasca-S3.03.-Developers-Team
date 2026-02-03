@@ -21,7 +21,8 @@ class TaskController extends ApplicationController
         if ($cleanKeyWord) {
             $this->view->tasks = $this->model->searchTasks($cleanKeyWord); //shows filtered
         } elseif ($status) {
-            $this->view->tasks = $this->model->sortByState($status);
+            $statusEnum = TaskState::from($status);
+            $this->view->tasks = $this->model->sortByState($statusEnum);
         } elseif ($date !== 'new') {
             $this->view->tasks = $this->model->sortByDate($date);
         } else {
@@ -68,12 +69,14 @@ class TaskController extends ApplicationController
 
     public function updatetaskAction()
     {
+        $statusEnum = TaskState::from($_POST['state']);
+
         $updatedTask = [
             'id'       => (int)$this->clean_input($_GET['id']),
             'name'       => $this->clean_input($_POST['name']),
             'description' => $this->clean_input($_POST['description']),
             'user'        => $this->clean_input($_POST['user']),
-            'state' => $this->clean_input($_POST['state'])
+            'state'       => $statusEnum ? $statusEnum->value : TaskState::PENDING->value
         ];
 
         $this->model->updateTask($updatedTask);
