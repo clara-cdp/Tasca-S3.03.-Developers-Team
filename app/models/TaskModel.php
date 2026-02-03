@@ -13,7 +13,7 @@ class TaskModel extends Model
     public function getAllTasks(): array
     {
         $data = $this->readData();
-        return array_reverse($data['tasks']);
+        return array_reverse($data['tasks']); //this already sets the data to newest by default
     }
 
     public function getTask(int $id): ?array
@@ -49,14 +49,14 @@ class TaskModel extends Model
         $data = $this->readData();
         foreach ($data['tasks'] as $index => $task) {
             if ((int)$task['id'] === (int)$updatedTask['id']) {
-                //  $currentTask = $this->getTask($updatedTask['id']);
-                if ($updatedTask['state'] === TaskState::FINIFSHED->value) { //--> add this: timeStamp to 'finished' state
+
+                if ($updatedTask['state'] === TaskState::FINISHED->value) { //--> added this: timeStamp to 'finished' state
                     $updatedTask['finished_at'] = date('Y-m-d H:i:s');
                 } else {
                     $updatedTask['finished_at'] = null;
                 }
                 $data['tasks'][$index] = array_merge($task, $updatedTask);
-                //  $data['tasks'][$index] = array_merge($currentTask, $updatedTask);
+
                 break;
             }
         }
@@ -78,51 +78,48 @@ class TaskModel extends Model
     public function searchTasks(string $keyWord): array
     {
         $allTasks = $this->getAllTasks();
-        $filteredTasks = [];
-        foreach ($allTasks as $task) {
-            if (
-                stripos($task['name'], $keyWord) !== false ||
+
+        $filteredTasks = array_filter(
+            $allTasks,
+            fn($task) =>
+            stripos($task['name'], $keyWord) !== false ||
                 stripos($task['description'], $keyWord) !== false ||
                 stripos($task['user'], $keyWord) !== false
-            ) {
-                $filteredTasks[] = $task;
-            }
-        }
+        );
+
         return $filteredTasks;
     }
 
-    public function sortByState(string $state): array
+    public function sortByState(TaskState $state): array
     {
         $allTasks = $this->getAllTasks();
-        $filteredByState = [];
-        foreach ($allTasks as $task) {
-            if ($task['state'] == $state)
-                $filteredByState[] = $task;
-        }
+
+        $filteredByState = $filteredByState = array_filter($allTasks, function ($task) use ($state) {
+            return $task['state'] === $state->value;
+        });
+
         return $filteredByState;
     }
 
     public function sortByDate(string $date): array
     {
-        $allTasks = $this->getAllTasks();
-        $sortedbyOld = array_reverse($allTasks);
-        if ($date == "old") {
-            return $sortedbyOld;
-        } else {
-            return $allTasks;
+        if ($date === "old") {
+            $data = $this->readData();
+            return $data['tasks'];
         }
+
+        return $this->getAllTasks();
     }
 
     public function changeState($taskID, $newState): void
     {
-        $jsonContent = file_get_contents($this->jsonFile);
-        $data = json_decode($jsonContent, true);
+        $data = $this->readData();
 
-        foreach ($data['tasks'] as &$task) { // Note the & (reference)
+        foreach ($data['tasks'] as &$task) {
             if ((int)$task['id'] === (int)$taskID) {
                 $task['state'] = $newState;
 
-                if ($newState === TaskState::FINIFSHED->value) {
+                if ($newState === TaskState::FINISHED->value) {
                     $task['finished_at'] = date('Y-m-d H:i:s');
                 } else {
                     $task['finished_at'] = null;
@@ -130,7 +127,7 @@ class TaskModel extends Model
             }
         }
 
-        file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT));
+        $this->writeData($data);
     }
 
     private function readData(): array
@@ -148,14 +145,5 @@ class TaskModel extends Model
             $this->jsonFile,
             json_encode($data, JSON_PRETTY_PRINT)
         );
-    }
-
-    public function  getTaskStatus()
-    {
-        // $jsonContent = file_get_contents($this->jsonFile);
-        // $data = json_decode($jsonContent, true);
-        if (isset($_POST['submit'])) {
-            return "okey Dokey";
-        }
     }
 }
