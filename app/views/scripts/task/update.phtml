@@ -1,3 +1,5 @@
+ <?php echo $this->render('../components/header.phtml'); ?>
+
 <div class="min-h-screen flex items-center justify-center bg-teal-300">
   <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
     <h1 class="text-center text-lg font-bold tracking-widest text-slate-800 mb-6">UPDATE NEW TASK</h1>
@@ -34,5 +36,7 @@
         </a>
       </div>
     </form>
-  </div>
+  </div><div class="mt-auto">
+   <?php echo $this->render('../components/footer.phtml'); ?>
+ </div>
 </div>
