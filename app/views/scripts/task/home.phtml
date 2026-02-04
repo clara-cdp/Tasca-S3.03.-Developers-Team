@@ -1,100 +1,249 @@
-<!DOCTYPE html>
-<html lang="en">
+<!--  ******************************** SIDE MENU ******************************** -->
+<div class="flex min-h-screen">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo list</title>
-</head>
+    <aside class="w-64 bg-sidebar-teal/95 text-white p-12 flex-shrink-0 flex flex-col">
+        <h3 class="font-black uppercase mb-10 text-s tracking-[0.2em]">Sort By</h3>
+        <form action="<?= WEB_ROOT ?>/home" method="GET" class="flex flex-col gap-8 text-16px font-semibold uppercase text-white/60">
 
-<body>
+            <button name="date" value="old"
+                class="text-left py-1 px-2 rounded transition-all hover:text-white 
+                <?= ($_GET['date'] ?? '') === 'old' ? 'text-white bg-white/10' : '' ?>"> Oldest First
+            </button>
 
-    <nav class=menu>
-        <form action="<?= WEB_ROOT ?>/home" method="GET" class="displayMenu">
+            <button name="date" value="new"
+                class="text-left py-1 px-2 rounded transition-all hover:text-white 
+                <?= ($_GET['date'] ?? '') === 'new' ? 'text-white bg-white/10' : '' ?>">Newest First
+            </button>
 
-            <h3>View Tasks:</h3>
+            <button name="status" value="pending"
+                class="text-left py-1 px-2 rounded transition-all hover:text-white 
+                <?= ($_GET['status'] ?? '') === 'pending' ? 'text-white bg-white/10' : '' ?>">Pending
+            </button>
 
-            <button type="submit" name="date" value="old">Sort by Oldest</button>
-            <button type="submit" name="date" value="new">Sort by Newest</button><br><br>
+            <button name="status" value="ongoing"
+                class="text-left py-1 px-2 rounded transition-all hover:text-white 
+                <?= ($_GET['status'] ?? '') === 'ongoing' ? 'text-white bg-white/10' : '' ?>">Ongoing
+            </button>
 
+            <button name="status" value="finished"
+                class="text-left py-1 px-2 rounded transition-all hover:text-white 
+                <?= ($_GET['status'] ?? '') === 'finished' ? 'text-white bg-white/10' : '' ?>">Finished
+            </button>
 
-            <button type="submit" name="status" value="pending">Pending</button>
-            <button type="submit" name="status" value="ongoing">Ongoing</button>
-            <button type="submit" name="status" value="finished">Finished</button><br><br>
-
-            <a href="<?= WEB_ROOT ?>/home">Reset Filters</a><br>
-
-            <hr>
+            <div class="mt-auto pt-10">
+                <a href="/web/home" class="w-fit opacity-40 hover:opacity-100 transition-opacity">Reset Filters</a>
+            </div>
         </form>
-    </nav>
+        </form>
+    </aside>
 
-    <div id="create">
-        <a href="<?= WEB_ROOT ?>/create"> <button id="createTask"> + </button></a>
-    </div>
+    <!--  ******************************** SEARCH AND ADD BUTTONS ******************************** -->
 
-    <form action="home" method="POST">
-        <input type="text" name="keyWord">
-        <input type="submit" value="search">🔍
-    </form>
+    <main class="flex-grow flex flex-col">
 
-    <div class="taskContainer">
+        <?php echo $this->render('../components/header.phtml'); ?>
 
-        <?php $displayTasks = $this->view->tasks ?? $this->tasks ?? [];
-        $isSearch = $this->view->isSearch ?? $this->isSearch ?? false; ?>
+        <div class="p-12 flex flex-col items-center">
+            <div class="w-full max-w-6xl flex justify-between items-center mb-16 px-6">
+                <form action="home" method="POST">
+                    <input type="text" name="keyWord" placeholder="🔍 search" class="rounded-full px-8 py-3 w-96 bg-white shadow-xl outline-teal text-sm">
+                </form>
+                <a href="<?= WEB_ROOT ?>/create" class="btn-main bg-teal-400 text-base text-teal-800 px-10 py-4 rounded-2x4 shadow-2xl">Add New</a>
+            </div>
 
-        <?php if (empty($displayTasks)): ?>
+            <!--  ******************************** TASK VIWER ******************************** -->
+            <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-12 px-6 mx-auto">
+                <?php
+                $displayTasks = $this->view->tasks ?? $this->tasks ?? [];
+                if (!empty($displayTasks)):
+                    foreach ($displayTasks as $task): ?>
 
-            <?php if ($isSearch): ?>
-                <p>⚠️ No tasks found... Try again!</p>
-            <?php else: ?>
-                <p>✅ All Done! Use the "+" button to add a new task.</p>
-            <?php endif; ?>
+                        <div class="card-white group flex flex-col h-full overflow-hidden">
 
-        <?php else: ?>
-            <?php foreach ($displayTasks as $task): ?>
-                <div class='taskBox' style="border: 1px solid black; width:200px; height:wrap; padding:5px" ;>
-                    <h3><?php echo htmlspecialchars($task['name']); ?></h3>
-                    <p><?php echo htmlspecialchars($task['description']); ?></p>
-                    <p><?php echo htmlspecialchars($task['created_at']); ?></p>
-                    <p><?php echo htmlspecialchars($task['user']); ?></p>
+                            <!-- ribbon ------------------------------------------------------>
+                            <?php
+                            $ribbonColor = 'bg-red-800';
+                            if (($task['state'] ?? '') == 'ongoing') $ribbonColor = 'bg-teal-900';
+                            if (($task['state'] ?? '') == 'finished') $ribbonColor = 'bg-teal-500';
+                            ?>
+                            <div class="absolute top-0 right-12 w-10 h-16 <?= $ribbonColor ?> ribbon shadow-lg"></div>
+
+                            <!-- task details ------------------------------------------------------>
+                            <div class="flex-grow">
+                                <h3 class="text-base font-black  mb-4 uppercase text-slate-800 tracking-wide">
+                                    <?= htmlspecialchars($task['name'] ?? 'Task') ?>
+                                </h3>
+                                <p class="text-gray-500 text-base leading-2 mb-4 min-h-[70px] line-clamp-3">
+                                    <?= htmlspecialchars($task['description'] ?? '') ?>
+                                </p>
+
+                                <p class="text-[10px] text-gray-400 font-semibold uppercase italic tracking-widest">created by:
+                                    <?= htmlspecialchars($task['user'] ?? '') ?>
+                                </p>
+
+                                <div class="space-y-1 mb-3 ">
+                                    <p class="text-[10px] text-gray-400 font-semibold uppercase italic tracking-widest">on
+                                        <?= htmlspecialchars($task['created_at'] ?? '') ?>
+                                    </p>
+                                    <?php if (!empty($task['finished_at'])): ?>
+                                        <p class="text-[10px] text-teal-600 font-black uppercase tracking-widest">
+                                            🏁 Finished: <?= htmlspecialchars($task['finished_at']) ?>
+                                        </p>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!--- START/FINISH TASK BUTTONS  --------------------------------------------------------------------------->
+                                <div class="flex ">
+                                    <?php if (($task['state'] ?? '') == 'pending'): ?>
+                                        <a href=" changeState?id=<?= $task['id'] ?>&state=ongoing"
+                                            class="btn-main w-full block text-center bg-teal-500">Start Task</a>
+                                    <?php elseif (($task['state'] ?? '') == 'ongoing'): ?>
+                                        <a href="changeState?id=<?= $task['id'] ?>&state=finished"
+                                            class="btn-main w-full block text-center bg-teal-800">Mark as Done</a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+
+                            <!---- EDIT AND DELETE BUTTONS -->
+
+                            <div class="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 
+                                        group-hover:translate-y-0 flex gap-4 ">
+                                <a href="update?id=<?= $task['id'] ?>"
+                                    class="btn-main flex-1 text-center bg-teal-200 !text-teal-500 hover:!bg-teal-900 hover:!text-white">Edit</a>
+                                <a href=" delete?id=<?= $task['id'] ?>"
+                                    onclick="return confirm('Are you sure you want to delete this task?')"
+                                    class=" btn-main flex-1 text-center bg-red-500/20 !text-red-500 hover:!bg-red-500 hover:!text-white">Delete</a>
+                            </div>
+                        </div>
 
 
+
+                <?php endforeach;
+                endif; ?>
+            </div>
+        </div>
+
+        <div class="mt-auto">
+            <?php echo $this->render('../components/footer.phtml'); ?>
+        </div>
+    </main>
+</div>
+
+
+
+
+
+<?php /*
+<body>
+  
+    <!-- side menu -----------------  -->
+    <div class="flex">
+        <div class="w-1/6 bg-teal-950 text-white flex-col justify-items-start uppercase">
+            <form action=" <?= WEB_ROOT ?>/home" method="GET" class="displayMenu">
+
+                <div>
+                    <h3 class="mx-2 my-4">View Tasks:</h3>
+                </div>
+
+                <div class=""><button type=" submit" name="date" value="old">Sort by Oldest</button></div>
+                <div class="uppercase mx-2 my-4"><button type="submit" name="date" value="new">Sort by Newest</button></div>
+                <div class="uppercase mx-2 my-4"><button type="submit" class="my-button" name="status" value="pending">Pending</button></div>
+                <div class="uppercase mx-2 my-4"><button type="submit" name="status" value="ongoing">Ongoing</button></div>
+                <div class="uppercase mx-2 my-4"><button type="submit" name="status" value="finished">Finished</button></div>
+
+                <div class="mx-2 my-4"><a href="<?= WEB_ROOT ?>/home">Reset Filters</a></div>
+
+            </form>
+        </div>
+
+        <!-- side menu -----------------  -->
+        <!-- SEARCH AND CREATE  -----------------  -->
+
+        <div class="w-5/6 ">
+            <div class="flex" ;>
+                <div class="w-2/3">
                     <form action="home" method="POST">
-
-                        <?php echo  htmlspecialchars($task['state']); // --> check line: burn after reading ;)
-                        ?><br>
-
-                        <a href="changeState?id=<?= $task['id'] ?>&state=ongoing">
-                            <input type="button" name="ongoing" value="start"></a>
-                        <a href="changeState?id=<?= $task['id'] ?>&state=finished">
-                            <input type="button" name="finished" value="finish"></a>
+                        <input type="text" name="keyWord">
+                        <input type="submit" value="search">🔍
                     </form>
+                </div>
+                <div>
+                    <div class="w-3/3>
+                        <a href=" <?= WEB_ROOT ?>/create"> <button id="createTask"> + </button></a>
+                    </div>
+                </div>
+            </div>
 
-                    <?php if (isset($task['finished_at'])): ?>
-                        <p>🏁 Finished: <?= htmlspecialchars($task['finished_at']) ?></p>
+
+            <!-- SEARCH AND CREATE  -----------------  -->
+            <div class="grid-cols-3" ;>
+
+
+                <?php $displayTasks = $this->view->tasks ?? $this->tasks ?? [];
+                $isSearch = $this->view->isSearch ?? $this->isSearch ?? false; ?>
+
+                <?php if (empty($displayTasks)): ?>
+
+                    <?php if ($isSearch): ?>
+                        <p>⚠️ No tasks found... Try again!</p>
+                    <?php else: ?>
+                        <p>✅ All Done! Use the " +" button to add a new task.</p>
                     <?php endif; ?>
 
-                    <hr>
-
-                    <a href="update?id=<?php echo $task['id']; ?>"><button>✏️</button></a>
-                    <a href="delete?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">
-                        <button>🗑️</button></a>
-
-
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-
-    </div>
+                <?php else: ?>
+                    <?php foreach ($displayTasks as $task): ?>
+                        <div class='taskBox' ;>
+                            <h3 class="font-size: 1.125rem (18px) font-weight: 700;"><?php echo htmlspecialchars($task['name']); ?></h3>
+                            <p><?php echo htmlspecialchars($task['description']); ?></p>
+                            <p><?php echo htmlspecialchars($task['created_at']); ?></p>
+                            <p><?php echo htmlspecialchars($task['user']); ?></p>
 
 
+                            <form action=" home" method="POST">
 
+                                <?php echo  htmlspecialchars($task['state']); // --> check line: burn after reading ;)
+                                ?><br>
 
+                                <a href="changeState?id=<?= $task['id'] ?>&state=ongoing">
+                                    <input type="button" name="ongoing" value="start"></a>
+                                <a href="changeState?id=<?= $task['id'] ?>&state=finished">
+                                    <input type="button" name="finished" value="finish"></a>
+                            </form>
 
+                            <?php if (isset($task['finished_at'])): ?>
+                                <p>🏁 Finished: <?= htmlspecialchars($task['finished_at']) ?></p>
+                            <?php endif; ?>
 
+                            <hr>
+
+                            <a href="update?id=<?php echo $task['id']; ?>"><button>✏️</button></a>
+                            <a href="delete?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">
+                                <button>🗑️</button></a>
+
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+
+            </div>
+        </div>
 
 
 
 </body>
 
 </html>
+
+*/ ?>
+
+<!--- OLD START BUTTONS --------------------------------------------------------------------------->
+<?php /*
+                                <div class="flex gap-2 mb-2">
+                                    <?php if (($task['state'] ?? '') != 'ongoing' && ($task['state'] ?? '') != 'finished'): ?>
+                                        <a href="changeState?id=<?= $task['id'] ?>&state=ongoing" class="btn-main flex-1 text-center !bg-cyan-600">Start</a>
+                                    <?php endif; ?>
+
+                                    <?php if (($task['state'] ?? '') != 'finished'): ?>
+                                        <a href="changeState?id=<?= $task['id'] ?>&state=finished" class="btn-main flex-1 text-center !bg-teal-800">Finish</a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>*/ ?>

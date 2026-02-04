@@ -1,3 +1,4 @@
+<?php echo $this->render('../components/header.phtml'); ?>
 <h1>Create New Task</h1>
 
 <form action="<?= WEB_ROOT ?>/savetask" method="POST">
@@ -24,3 +25,6 @@
     Return
   </a>
 </p>
+<div class="mt-auto">
+  <?php echo $this->render('../components/footer.phtml'); ?>
+</div>

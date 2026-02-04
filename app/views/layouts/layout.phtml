@@ -3,23 +3,49 @@
 
 <head>
 	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script>
+		tailwind.config = {
+			theme: {
+				extend: {
+					colors: {
+						'sidebar-teal': '#0d2d35',
+						'task-dark': '#0f172a',
+						'pending': '#991b1b', // Dark red
+						'ongoing': '#06b6d4', // Cyan
+						'finished': '#134e4a', // Dark teal
+					}
+				}
+			}
+		}
+	</script>
+	<style type="text/tailwindcss">
+		@layer components {
+            .btn-main { @apply bg-task-dark text-white py-1.5 px-6 rounded-[1vw] text-[11px] font-black uppercase tracking-widest hover:opacity-90 transition-all; }
+            .card-white { @apply bg-white rounded-[1.5rem] pt-20 pb-4 p-6 shadow-2xl relative flex flex-col min-h-[330px] min-w-[300px] transition-transform hover:scale-[1.02]; }
+            .ribbon {
+                clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%);
+            }
+        }
+        body { 
+            margin: 0;
+            background-color: teal; 
+        }
+    </style>
 </head>
 
-<body>
-	<header>TASK-O-MANIA
-		<hr>
-	</header>
-
-	<div class="wrapper">
-
-		<?php echo $this->content(); ?>
+<body class="min-h-screen font-sans text-white">
+	<div class="fixed inset-0 -z-10 w-full h-full bg-cover bg-center bg-no-repeat bg-fixed"
+		style="background-image: url('/web/images/bg.jpg');">
 	</div>
-	<footer style='text-align:center' ;>
-		<hr>Greogidelrio&clara-cdp @2026
 
-	</footer>
+	<div class="relative z-0">
+		<?= $this->content(); ?>
+	</div>
+</body>
+
+
 
 </body>
 
