@@ -2,9 +2,11 @@
 <header class="hidden lg:block w-full max-w-7xl mx-auto px-12 pt-12 pb-6">
     <div class="flex items-center justify-between">
         <div class="flex items-center">
-            <img src="/web/images/taskomania.png"
-                alt="Task-O-Mania Logo"
-                class="h-20 w-auto transition-all duration-500 ease-out hover:scale-110 hover:brightness-125 hover:saturate-200">
+            <a href="<?= WEB_ROOT ?>/home">
+                <img src="/web/images/taskomania.png"
+                    alt="Task-O-Mania Logo"
+                    class="h-20 w-auto transition-all duration-500 ease-out hover:scale-110 hover:brightness-125 hover:saturate-200">
+            </a>
         </div>
     </div>
 </header>
@@ -12,6 +14,8 @@
 <!-- mobile style -->
 <header class="block lg:hidden w-full bg-sidebar-teal/95 p-4">
     <div class="flex flex-col items-center gap-4">
-        <img src="/web/images/taskomania.png" class="h-12 w-auto">
+        <a href="<?= WEB_ROOT ?>/home">
+            <img src="/web/images/taskomania.png" class="h-12 w-auto">
+        </a>
     </div>
 </header>
