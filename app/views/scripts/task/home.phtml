@@ -131,22 +131,22 @@
                         <!-- ribbon ------------------------------------------------------>
                         <?php
                         $ribbonColor = 'bg-red-800';
-                        if (($task['state'] ?? '') == 'ongoing') $ribbonColor = 'bg-teal-900';
-                        if (($task['state'] ?? '') == 'finished') $ribbonColor = 'bg-teal-100';
+                        if (($task['task_state'] ?? '') == 'ongoing') $ribbonColor = 'bg-teal-900';
+                        if (($task['task_state'] ?? '') == 'finished') $ribbonColor = 'bg-teal-100';
                         ?>
                         <div class="absolute top-0 right-12 w-10 h-16 <?= $ribbonColor ?> ribbon shadow-lg"></div>
 
                         <!-- task details ------------------------------------------------------>
                         <div class="flex-grow">
                             <h3 class="text-base font-black  mb-4 uppercase text-slate-800 tracking-wide">
-                                <?= htmlspecialchars($task['name'] ?? 'Task') ?>
+                                <?= htmlspecialchars($task['task_title'] ?? 'Task') ?>
                             </h3>
                             <p class="text-gray-500 text-base leading-2 mb-4 min-h-[70px] line-clamp-3">
-                                <?= htmlspecialchars($task['description'] ?? '') ?>
+                                <?= htmlspecialchars($task['task_description'] ?? '') ?>
                             </p>
 
                             <p class="text-[10px] text-gray-400 font-semibold uppercase italic tracking-widest">created by:
-                                <?= htmlspecialchars($task['user'] ?? '') ?>
+                                <?= htmlspecialchars($task['user_name'] ?? '') ?>
                             </p>
 
                             <div class="space-y-1 mb-3 ">
@@ -162,12 +162,12 @@
 
                             <!--- START/FINISH TASK BUTTONS  --------------------------------------------------------------------------->
                             <div class="flex ">
-                                <?php if (($task['state'] ?? '') == 'pending'): ?>
-                                    <a href=" changeState?id=<?= $task['id'] ?>&state=ongoing"
+                                <?php if (($task['task_state'] ?? '') == 'pending'): ?>
+                                    <a href=" changetask_state?id=<?= $task['id'] ?>&task_state=ongoing"
                                         class="btn-main w-full block text-center bg-teal-500">Start Task</a>
 
-                                <?php elseif (($task['state'] ?? '') == 'ongoing'): ?>
-                                    <a href="changeState?id=<?= $task['id'] ?>&state=finished"
+                                <?php elseif (($task['task_state'] ?? '') == 'ongoing'): ?>
+                                    <a href="changetask_state?id=<?= $task['id'] ?>&task_state=finished"
                                         class="btn-main w-full block text-center bg-teal-800">Mark as Done</a>
 
                                 <?php endif; ?>
@@ -195,4 +195,38 @@
             <?php echo $this->render('../components/footer.phtml'); ?>
         </div>
     </main>
+</div>
+
+<div>
+    <!-- trying connections -->
+    <h1>trying connections:</h1>
+
+</div>
+<div>
+    <h1>Task Details</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>created</th>
+                <th>status</th>
+                <th>finished</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->allTasks as $task): ?>
+                <tr>
+                    <td><?= $task['idTASK'] ?></td>
+                    <td><?= $task['task_title'] ?></td>
+                    <td><?= $task['task_description'] ?></td>
+                    <td><?= $task['created_at'] ?></td>
+                    <td><?= $task['task_state'] ?></td>
+                    <td><?= $task['finished_at'] ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
