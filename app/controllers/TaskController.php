@@ -11,9 +11,7 @@ class TaskController extends ApplicationController
     }
     public function homeAction()
     {
-        $model = new TaskModel();
-
-        $this->view->allTasks = $model->getAllTasks();
+        $this->view->tasks = $this->model->getAllTasks();
     }
 
     public function createAction() {}
@@ -33,6 +31,19 @@ class TaskController extends ApplicationController
         header("Location: " . WEB_ROOT . "/home");
         exit;
     }
+
+    public function deleteAction()
+    {
+        $id = $_GET['idTASK'] ?? null;
+
+        if ($id) {
+            $this->model->deleteTask($id);
+        }
+
+        header('Location: ' . $this->_baseUrl() . '/home');
+        exit;
+    }
+
     /*
         $keyWord = $_POST['keyWord'] ?? '';
         $status = $_REQUEST['status'] ?? '';
