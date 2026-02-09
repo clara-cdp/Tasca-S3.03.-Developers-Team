@@ -116,7 +116,6 @@ class TaskModel extends Model
     {
         $allTasks = $this->getAllTasks();
 
-
         if ($date === "old") {
             $oldFirst = array_reverse($allTasks);
             return $oldFirst;
