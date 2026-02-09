@@ -42,8 +42,5 @@ function autoloader($className)
 // activates the autoloader
 spl_autoload_register('autoloader');
 
-// finds database -> it might no be needed we'll see...
-require_once ROOT_PATH . '/config/db.inc.php';
-
 $router = new Router();
 $router->execute($routes);

@@ -5,14 +5,13 @@ class TaskController extends ApplicationController
 {
     private TaskModel $model;
 
-    public function __construct() {}
+    public function __construct()
+    {
+        $this->model = new TaskModel();
+    }
+
     public function homeAction()
     {
-        $model = new TaskModel();
-
-        $this->view->allTasks = $model->getAllTasks();
-    }
-    /*
         $keyWord = $_POST['keyWord'] ?? '';
         $status = $_REQUEST['status'] ?? '';
         $date = $_REQUEST['date'] ?? 'new'; // Default to newest
@@ -95,5 +94,5 @@ class TaskController extends ApplicationController
 
         header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
         exit;
-    }*/
+    }
 }

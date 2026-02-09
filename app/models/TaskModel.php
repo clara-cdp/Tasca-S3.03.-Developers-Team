@@ -2,39 +2,20 @@
 
 class TaskModel extends Model
 {
-    public function init()
+    protected $jsonFile = ROOT_PATH . '/app/models/tasks.json';
+
+    public function __construct()
     {
-        $this->_setTable('task');
+        // By leaving this empty, we don't call parent::__construct()
+        // so the app stops looking for a MySQL server.
     }
 
-    public function fetchOne($id)
+    public function getAllTasks(): array
     {
-        $sql = 'SELECT * FROM ' . $this->_table;
-        $sql .= ' WHERE idTASK = ?'; // eal column name
-
-        $statement = $this->_dbh->prepare($sql);
-        $statement->execute(array($id));
-
-        return $statement->fetch(PDO::FETCH_OBJ);
-    }
-
-    public function getAllTasks()
-    {
-        $sql = "SELECT * FROM task";
-        $statement = $this->_dbh->prepare($sql);
-        $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
-}
-
-
-/*
-
-  public function getAllTasks(): array
-    {
-       // $data = $this->readData();
+        $data = $this->readData();
         return array_reverse($data['tasks']); //this already sets the data to newest by default
     }
+
     public function getTask(int $id): ?array
     {
         $data = $this->readData();
@@ -165,4 +146,4 @@ class TaskModel extends Model
             json_encode($data, JSON_PRETTY_PRINT)
         );
     }
-}*/
+}
