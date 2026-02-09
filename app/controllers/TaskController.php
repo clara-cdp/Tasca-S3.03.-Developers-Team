@@ -65,7 +65,15 @@ class TaskController extends ApplicationController
         header('Location: ' . $this->_baseUrl() . '/home');
         exit;
     }
+    public function changeStateAction()
+    {
+        $taskID = $_GET['idTASK'];
+        $newState = $_GET['task_state'];
+        $this->model->changeState($taskID, $newState);
 
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit;
+    }
     /*
         $keyWord = $_POST['keyWord'] ?? '';
         $status = $_REQUEST['status'] ?? '';
