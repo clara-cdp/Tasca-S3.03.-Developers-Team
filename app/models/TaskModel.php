@@ -20,9 +20,11 @@ class TaskModel extends Model
 
     public function getAllTasks()
     {
-        $sql = "SELECT * FROM task";
+        $sql = 'select * from ' . $this->_table;
+
         $statement = $this->_dbh->prepare($sql);
         $statement->execute();
+
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     protected function _setTable($table)
@@ -84,6 +86,11 @@ class TaskModel extends Model
         }
 
         return false;
+    }
+    public function deleteTask(int $id): bool
+    {
+        $statement = $this->_dbh->prepare("delete from " . $this->_table . " where idTASK = ?");
+        return $statement->execute(array($id));
     }
 }
 
