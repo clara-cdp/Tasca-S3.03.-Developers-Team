@@ -5,12 +5,33 @@ class TaskController extends ApplicationController
 {
     private TaskModel $model;
 
-    public function __construct() {}
+    public function __construct()
+    {
+        $this->model = new TaskModel();
+    }
     public function homeAction()
     {
         $model = new TaskModel();
 
         $this->view->allTasks = $model->getAllTasks();
+    }
+
+    public function createAction() {}
+
+    public function savetaskAction()
+    {
+        $newTask = [
+            'task_title' => $this->clean_input($_POST['task_title'] ?? ''),
+            'task_description' => $this->clean_input($_POST['task_description'] ?? ''),
+            'user_name' => $this->clean_input($_POST['user_name'] ?? ''),
+            'created_at' => date('Y-m-d H:i:s'),
+            'task_state'  => TaskState::PENDING->value,   //updated this to status ENUM
+            'finished_at' => null
+        ];
+
+        $this->model->save($newTask);
+        header("Location: " . WEB_ROOT . "/home");
+        exit;
     }
     /*
         $keyWord = $_POST['keyWord'] ?? '';
@@ -33,7 +54,7 @@ class TaskController extends ApplicationController
         $this->view->isSearch = ($cleanKeyWord || $status || $date !== 'new');
     }
 
-    public function createAction() {}
+    
 
     public function savetaskAction()
     {

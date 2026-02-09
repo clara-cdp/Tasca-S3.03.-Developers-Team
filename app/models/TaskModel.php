@@ -7,10 +7,10 @@ class TaskModel extends Model
         $this->_setTable('task');
     }
 
-    public function fetchOne($id)
+    public function fetchOne($id) //  updated id with idTASK :_S
     {
         $sql = 'SELECT * FROM ' . $this->_table;
-        $sql .= ' WHERE idTASK = ?'; // eal column name
+        $sql .= ' WHERE idTASK = ?'; // real column name
 
         $statement = $this->_dbh->prepare($sql);
         $statement->execute(array($id));
@@ -24,6 +24,66 @@ class TaskModel extends Model
         $statement = $this->_dbh->prepare($sql);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    protected function _setTable($table)
+    {
+        $this->_table = $table;
+    }
+
+    public function save($data = array())
+    {
+        $sql = '';
+
+        $values = array();
+
+        if (array_key_exists('idTASK', $data)) {
+            $sql = 'update ' . $this->_table . ' set ';
+
+            $first = true;
+            foreach ($data as $key => $value) {
+                if ($key != 'idTASK') {
+                    $sql .= ($first == false ? ',' : '') . ' ' . $key . ' = ?';
+
+                    $values[] = $value;
+
+                    $first = false;
+                }
+            }
+
+            // adds the id as well
+            $values[] = $data['idTASK'];
+
+            $sql .= ' where idTASK = ?'; // . $data['id'];
+
+            $statement = $this->_dbh->prepare($sql);
+            return $statement->execute($values);
+        } else {
+            $keys = array_keys($data);
+
+            $sql = 'insert into ' . $this->_table . '(';
+            $sql .= implode(',', $keys);
+            $sql .= ')';
+            $sql .= ' values (';
+
+            $dataValues = array_values($data);
+            $first = true;
+            foreach ($dataValues as $value) {
+                $sql .= ($first == false ? ',?' : '?');
+
+                $values[] = $value;
+
+                $first = false;
+            }
+
+            $sql .= ')';
+
+            $statement = $this->_dbh->prepare($sql);
+            if ($statement->execute($values)) {
+                return $this->_dbh->lastInsertId();
+            }
+        }
+
+        return false;
     }
 }
 

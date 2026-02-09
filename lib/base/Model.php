@@ -29,10 +29,7 @@ class Model
 		$this->init();
 	}
 
-	public function init()
-	{
-		// ...something must be cooking here
-	}
+	public function init() {}
 
 	/**
 	 * Sets the database table the model is using
