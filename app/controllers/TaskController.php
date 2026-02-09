@@ -66,84 +66,28 @@ class TaskController extends ApplicationController
         exit;
     }
 
-    /*
-        $keyWord = $_POST['keyWord'] ?? '';
-        $status = $_REQUEST['status'] ?? '';
-        $date = $_REQUEST['date'] ?? 'new'; // Default to newest
-
-    /*    public function changeStateAction()
-    {
-        $taskID = $_GET['idTask'];
-        $newState = $_GET['task_state'];
-
-        $model = new TaskModel();
-        $model->changeState($taskID, $newState);
-
-        header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
-        exit;
-    }
-*/
-
-    /*
-    public function savetaskAction()
-    {
-
-        $newTask = [
-            'id' => null,
-            'name' => $this->clean_input($_POST['name'] ?? ''),
-            'description' => $this->clean_input($_POST['description'] ?? ''),
-            'user' => $this->clean_input($_POST['user'] ?? ''),
-            'created_at' => date('Y-m-d H:i:s'),
-            'state'  => TaskState::PENDING->value   //updated this to status ENUM
-        ];
-
-        $this->model->saveTask($newTask);
-        header("Location: " . WEB_ROOT . "/home");
-        exit;
-    }
-
-    public function deleteAction()
-    {
-        $idToDelete = $_GET['id'];
-
-        $this->model->deleteTask($idToDelete);
-
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
-        exit;
-    }
-
     public function updateAction()
     {
-        $task = $this->model->getTask($_GET['id']);
+        $task = $this->model->fetchOne($_GET['id']);
         $this->view->task = $task;
     }
 
+
     public function updatetaskAction()
     {
+        $id = $_GET['idTASK'] ?? null;
         $statusEnum = TaskState::from($_POST['state']);
 
         $updatedTask = [
-            'id'       => (int)$this->clean_input($_GET['id']),
-            'name'       => $this->clean_input($_POST['name']),
-            'description' => $this->clean_input($_POST['description']),
-            'user'        => $this->clean_input($_POST['user']),
-            'state'       => $statusEnum ? $statusEnum->value : TaskState::PENDING->value
+            'idTASK'           => (int)$id,
+            'task_title'       => $this->clean_input($_POST['name']),
+            'task_description' => $this->clean_input($_POST['description']),
+            'user_name'        => $this->clean_input($_POST['user']),
+            'task_state'       => $statusEnum ? $statusEnum->value : TaskState::PENDING->value
         ];
 
-        $this->model->updateTask($updatedTask);
+        $this->model->save($updatedTask);
         header("Location: " . WEB_ROOT . "/home");
         exit;
     }
-
-    public function changeStateAction()
-    {
-        $taskID = $_GET['id'];
-        $newState = $_GET['state'];
-
-        $model = new TaskModel();
-        $model->changeState($taskID, $newState);
-
-        header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
-        exit;
-    }*/
 }
