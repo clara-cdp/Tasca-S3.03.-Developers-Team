@@ -92,10 +92,49 @@ class TaskModel extends Model
         $statement = $this->_dbh->prepare("delete from " . $this->_table . " where idTASK = ?");
         return $statement->execute(array($id));
     }
-}
 
 
-/*
+    public function searchTasks(string $keyWord): array
+    {
+        $allTasks = $this->getAllTasks();
+
+        $filteredTasks = array_filter(
+            $allTasks,
+            fn($task) =>
+            stripos($task['task_title'], $keyWord) !== false ||
+                stripos($task['task_description'], $keyWord) !== false ||
+                stripos($task['user_name'], $keyWord) !== false
+        );
+
+        return $filteredTasks;
+    }
+
+    public function sortByState(TaskState $state): array
+    {
+        $allTasks = $this->getAllTasks();
+
+        $filteredByState = $filteredByState = array_filter($allTasks, function ($task) use ($state) {
+            return $task['task_state'] === $state->value;
+        });
+
+        return $filteredByState;
+    }
+
+    public function sortByDate(string $date): array
+    {
+        $allTasks = $this->getAllTasks();
+
+        if ($date === "old") {
+            $oldFirst = array_reverse($allTasks);
+            return $oldFirst;
+        }
+
+        return $this->getAllTasks();
+    }
+
+
+
+    /*
 
   public function getAllTasks(): array
     {
@@ -161,43 +200,8 @@ class TaskModel extends Model
         $this->writeData($data);
     }
 
-    public function searchTasks(string $keyWord): array
-    {
-        $allTasks = $this->getAllTasks();
-
-        $filteredTasks = array_filter(
-            $allTasks,
-            fn($task) =>
-            stripos($task['name'], $keyWord) !== false ||
-                stripos($task['description'], $keyWord) !== false ||
-                stripos($task['user'], $keyWord) !== false
-        );
-
-        return $filteredTasks;
-    }
-
-    public function sortByState(TaskState $state): array
-    {
-        $allTasks = $this->getAllTasks();
-
-        $filteredByState = $filteredByState = array_filter($allTasks, function ($task) use ($state) {
-            return $task['state'] === $state->value;
-        });
-
-        return $filteredByState;
-    }
-
-    public function sortByDate(string $date): array
-    {
-        if ($date === "old") {
-            $data = $this->readData();
-            return $data['tasks'];
-        }
-
-        return $this->getAllTasks();
-    }
-
-    public function changeState($taskID, $newState): void
+   
+public function changeState($taskID, $newState): void
     {
         $data = $this->readData();
 
@@ -231,5 +235,5 @@ class TaskModel extends Model
             $this->jsonFile,
             json_encode($data, JSON_PRETTY_PRINT)
         );
-    }
-}*/
+    }*/
+}
