@@ -9,11 +9,31 @@ class TaskController extends ApplicationController
     {
         $this->model = new TaskModel();
     }
+
     public function homeAction()
     {
         $model = new TaskModel();
 
         $this->view->allTasks = $model->getAllTasks();
+
+        $keyWord = $_POST['keyWord'] ?? '';
+        $status = $_REQUEST['status'] ?? '';
+        $date = $_REQUEST['date'] ?? 'new';
+
+        $cleanKeyWord = $this->clean_input($keyWord);
+
+        if ($cleanKeyWord) {
+            $this->view->tasks = $this->model->searchTasks($cleanKeyWord); //shows filtered
+        } elseif ($status) {
+            $statusEnum = TaskState::from($status);
+            $this->view->tasks = $this->model->sortByState($statusEnum);
+        } elseif ($date !== 'new') {
+            $this->view->tasks = $this->model->sortByDate($date);
+        } else {
+            $this->view->tasks = $this->model->getAllTasks();
+        }
+
+        $this->view->isSearch = ($cleanKeyWord || $status || $date !== 'new');
     }
 
     public function createAction() {}
@@ -33,29 +53,21 @@ class TaskController extends ApplicationController
         header("Location: " . WEB_ROOT . "/home");
         exit;
     }
-    /*
-        $keyWord = $_POST['keyWord'] ?? '';
-        $status = $_REQUEST['status'] ?? '';
-        $date = $_REQUEST['date'] ?? 'new'; // Default to newest
 
-        $cleanKeyWord = $this->clean_input($keyWord);
+    /*    public function changeStateAction()
+    {
+        $taskID = $_GET['idTask'];
+        $newState = $_GET['task_state'];
 
-        if ($cleanKeyWord) {
-            $this->view->tasks = $this->model->searchTasks($cleanKeyWord); //shows filtered
-        } elseif ($status) {
-            $statusEnum = TaskState::from($status);
-            $this->view->tasks = $this->model->sortByState($statusEnum);
-        } elseif ($date !== 'new') {
-            $this->view->tasks = $this->model->sortByDate($date);
-        } else {
-            $this->view->tasks = $this->model->getAllTasks();
-        }
+        $model = new TaskModel();
+        $model->changeState($taskID, $newState);
 
-        $this->view->isSearch = ($cleanKeyWord || $status || $date !== 'new');
+        header('Location: ' . $_SERVER['HTTP_REFERER']); //find the right route
+        exit;
     }
+*/
 
-    
-
+    /*
     public function savetaskAction()
     {
 
