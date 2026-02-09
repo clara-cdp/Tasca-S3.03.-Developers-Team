@@ -133,4 +133,20 @@ class TaskModel extends Model
 
         return $this->getAllTasks();
     }
+
+    public function changeState($taskID, $newState): void
+    {
+
+        $sql = "UPDATE " . $this->_table . " SET task_state = ?, finished_at = ? WHERE idTASK = ?";
+
+        $finishedAt = null;
+        if ($newState === TaskState::FINISHED->value) {
+            $finishedAt = date('Y-m-d H:i:s');
+        }
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute(array($newState, $finishedAt, $taskID));
+     
+    }
+
 }
