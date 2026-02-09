@@ -19,5 +19,5 @@ $routes = array(
 	'/savetask' => 'task#savetask',
 	'/update' => 'task#update',
 	'/updatetask' => 'task#updatetask',
-	'/changeState' => 'task#changeState'
+	'/changetask_state' => 'task#changeState'
 );

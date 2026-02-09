@@ -132,6 +132,34 @@ class TaskModel extends Model
         return $this->getAllTasks();
     }
 
+    public function changeState($taskID, $newState): void
+    {
+
+        $sql = "UPDATE " . $this->_table . " SET task_state = ?, finished_at = ? WHERE idTASK = ?";
+
+        $finishedAt = null;
+        if ($newState === TaskState::FINISHED->value) {
+            $finishedAt = date('Y-m-d H:i:s');
+        }
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute(array($newState, $finishedAt, $taskID));
+        /*$data = $this->readData();
+
+        foreach ($data['tasks'] as &$task) {
+            if ((int)$task['idTASK'] === (int)$taskID) {
+                $task['task_state'] = $newState;
+
+                if ($newState === TaskState::FINISHED->value) {
+                    $task['finished_at'] = date('Y-m-d H:i:s');
+                } else {
+                    $task['finished_at'] = null;
+                }
+            }
+        }
+
+        $this->writeData($data);*/
+    }
 
 
     /*
