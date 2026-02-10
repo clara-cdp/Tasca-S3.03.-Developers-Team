@@ -69,30 +69,32 @@ class TaskController extends ApplicationController
     {
         $taskID = $_GET['idTASK'];
         $newState = $_GET['task_state'];
-        $this->model->changeState($taskID, $newState);}
-  
+        $this->model->changeState($taskID, $newState);
+
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit;
+    }
 
     public function updateAction()
     {
-        $task = $this->model->fetchOne($_GET['id']);
+        $id = $_GET['idTASK'];
+        $task = $this->model->getTask($id);
         $this->view->task = $task;
     }
 
-
     public function updatetaskAction()
     {
-        $id = $_GET['idTASK'] ?? null;
         $statusEnum = TaskState::from($_POST['state']);
 
         $updatedTask = [
-            'idTASK'           => (int)$id,
-            'task_title'       => $this->clean_input($_POST['name']),
+            'idTASK'          => (int)$this->clean_input($_GET['idTASK']),
+            'task_title'        => $this->clean_input($_POST['name']),
             'task_description' => $this->clean_input($_POST['description']),
             'user_name'        => $this->clean_input($_POST['user']),
             'task_state'       => $statusEnum ? $statusEnum->value : TaskState::PENDING->value
         ];
 
-        $this->model->save($updatedTask);
+        $this->model->updateTask($updatedTask);
         header("Location: " . WEB_ROOT . "/home");
         exit;
     }
