@@ -104,37 +104,38 @@ class TaskModel extends Model
 
     public function searchTasks(string $keyWord): array
     {
-        $allTasks = $this->getAllTasks();
+        $search = '%' . $keyWord . '%';
 
-        $filteredTasks = array_filter(
-            $allTasks,
-            fn($task) =>
-            stripos($task['task_title'], $keyWord) !== false ||
-                stripos($task['task_description'], $keyWord) !== false ||
-                stripos($task['user_name'], $keyWord) !== false
-        );
+        $sql = 'SELECT * FROM ' . $this->_table .
+            ' WHERE task_title LIKE ? 
+             OR task_description LIKE ? 
+             OR user_name LIKE ?';
 
-        return $filteredTasks;
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$search, $search, $search]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function sortByState(TaskState $state): array
     {
-        $allTasks = $this->getAllTasks();
+        $sql = 'SELECT * FROM ' . $this->_table . ' WHERE task_state = ?';
 
-        $filteredByState = $filteredByState = array_filter($allTasks, function ($task) use ($state) {
-            return $task['task_state'] === $state->value;
-        });
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute(array($state->value));
 
-        return $filteredByState;
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function sortByDate(string $date): array
     {
-        $allTasks = $this->getAllTasks();
-
         if ($date === "old") {
-            $oldFirst = array_reverse($allTasks);
-            return $oldFirst;
+            $sql = 'SELECT * FROM ' . $this->_table . ' ORDER BY created_at ASC';
+
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute(array());
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
         }
 
         return $this->getAllTasks();

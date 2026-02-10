@@ -78,7 +78,7 @@ class TaskController extends ApplicationController
     public function updateAction()
     {
         $id = $_GET['idTASK'];
-        $task = $this->model->getTask($id);
+        $task = $this->model->fetchOne($id);
         $this->view->task = $task;
     }
 
