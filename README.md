@@ -37,7 +37,7 @@ cd repo-name
 4. Open your browser and go to http://localhost:8000.
    
 ### SQL PERSISTANCE: 
-1. **switch to develop branch** 
+1. **switch to DEVELOP branch** 
 2. Clone the repositoryBashgit clone https://github.com/your-username/repo-name.git
 cd repo-name
 3. Database ConfigurationCreate a database named todo_db in your local environment (XAMPP, Laragon, etc.).Import the database.sql file located in the root directory.Note: Update your credentials in the connection file (e.g., config/db.inc.php):PHP$host = "localhost"; 
