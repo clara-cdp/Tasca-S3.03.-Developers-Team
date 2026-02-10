@@ -30,20 +30,22 @@ This project focuses on implementing key backend concepts, including:
 Follow these steps to get the project running locally:
 
 ### JSON PERSISTANCE: 
-1. Clone the repositoryBashgit clone https://github.com/your-username/repo-name.git
+1. **switch to MAIN branch** 
+2. Clone the repositoryBashgit clone https://github.com/your-username/repo-name.git
 cd repo-name
-2. Run the Server If you are using the PHP built-in server:Bashphp -S localhost:8000
-3. Open your browser and go to http://localhost:8000.
+3. Run the Server If you are using the PHP built-in server:Bashphp -S localhost:8000
+4. Open your browser and go to http://localhost:8000.
    
 ### SQL PERSISTANCE: 
-1. Clone the repositoryBashgit clone https://github.com/your-username/repo-name.git
+1. **switch to develop branch** 
+2. Clone the repositoryBashgit clone https://github.com/your-username/repo-name.git
 cd repo-name
-2. Database ConfigurationCreate a database named todo_db in your local environment (XAMPP, Laragon, etc.).Import the database.sql file located in the root directory.Note: Update your credentials in the connection file (e.g., config/db.inc.php):PHP$host = "localhost"; 
+3. Database ConfigurationCreate a database named todo_db in your local environment (XAMPP, Laragon, etc.).Import the database.sql file located in the root directory.Note: Update your credentials in the connection file (e.g., config/db.inc.php):PHP$host = "localhost"; 
 $host = "localhost";
 $user = "root";
 $pass = "your_password";
-3. Run the ServerIf you are using the PHP built-in server:Bashphp -S localhost:8000
-4. open your browser and go to http://localhost:8000.
+4. Run the ServerIf you are using the PHP built-in server:Bashphp -S localhost:8000
+5. open your browser and go to http://localhost:8000.
 
 # 📁 Project Structure
 
