@@ -1,83 +1,59 @@
-# PHP initial Project
-Main structure of php project. Folders / files:
-- **app**
-  - **controllers**
-  - **models**
-  - **views**
-- **config**
-- **lib**
-  - **base**
-- **web**
+# 📝 Task-O-Mania
+A task management application built using a custom-built PHP MVC Framework. The primary aim of this project is to master the management of existing codebases and to understand the inner workings of the Model-View-Controller (MVC) architectural pattern.
 
-### Usage
+This project focuses on implementing key backend concepts, including:
 
-The web/index.php is the heart of the system.
-This means that your web applications root folder is the “web” folder.
+- Advanced Routing: Directing traffic through a Front Controller.
 
-All requests go through this file and it decides how the routing of the app
-should be.
-You can add additional hooks in this file to add certain routes.
+- Controller Logic: Managing the bridge between user input and system response.
 
-### Project Structure
-
-The root of the project holds a few directories:
-**/app** This is the folder where your magic will happen. Use the views, controllers and models folder for your app code.
-**/config** this folder holds a few configuration files. Currently only the connection to the database.
-**/lib** This is where you should put external libraries and other external files.
-**/lib/base** The library files. Don’t change these :)
-**/web** This folder holds files that are to be “downloaded” from your app. Stylesheets, javascripts and images used. (and more of course)
-
-The system uses a basic MVC structure, with your web app’s files located in the
-“app” folder.
-
-#### app/controllers
-Your application’s controllers should be defined here.
-
-All controller names should end with “Controller”. E.g. TestController.
-All controllers should inherit the library’s “Controller” class.
-However, you should generally just make an ApplicationController, which extends
-the Controller. Then you can defined beforeFilters etc in that, which will get run
-at every request.
-
-#### app/models
-Models handles database interaction etc.
-
-All models should inherit from the Model class, which provides basic functionality.
-The Model class handles basic functionality such as:
-
-Setting up a database connection (using PDO)
-fetchOne(ID)
-save(array) → both update/create
-delete(ID)
-app/views
-Your view files.
-The structure is made so that having a controller named TestController, it looks
-in the app/views/test/ folder for it’s view files.
-
-All view files end with .phtml
-Having an action in the TestController called index, the view file
-app/views/test/index.phtml will be rendered as default.
-
-#### config/routes.php
-Your routes around the system needs to be defined here.
-A route consists of the URL you want to call + the controller#action you want it
-to hit.
-
-An example is:
-$routes = array(
-‘/test’ => ‘test#index’ // this will hit the TestController’s indexAction method.
-);
-
-#### Error handling
-A general error handling has been added.
-
-If a route doesn’t exist, then the error controller is hit.
-If some other exception was thrown, the error controller is hit.
-As default, the error controller just shows the exception occured, so remember
-to style the error controller’s view file (app/views/error/error.phtml)
+- Persistence: Handling data storage using JSON files (for lightweight storage) and MySQL (for relational database persistence).
 
 
-### Utilities
-- [PHP Developers Guide](https://www.php.net/manual/en/index.php).
-- .gitignore file configuration. [See Official Docs](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files).
-- Git branches. [See Official Docs](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell).
+## Features
+
+- **CRUD:** Create, Read, Update, and Delete tasks.
+- **Task Status:** Toggle between "Pending" and "Completed" states by clicking "start task" or "finish".
+- **filter**: filter button for custom view of tasks.
+- **search**: find wanted task quickly.
+- **Responsive Design:** Fully optimized for mobile and desktop views via Tailwind.
+- **Data Validation:** Secure input handling to prevent basic vulnerabilities.
+
+# 🛠️ Technology
+
+- **PHP 8**: Server-side logic and backend processing.
+- **JSON**: Lightweight data storage for file-based persistence.
+- **MySQL**: Relational database management.
+- **Tailwind CSS**: Utility-first styling for a modern look.
+
+# 🚀 Installation & Setup
+Follow these steps to get the project running locally:
+
+### JSON PERSISTANCE: 
+1. Clone the repositoryBashgit clone https://github.com/your-username/repo-name.git
+cd repo-name
+2. Run the Server If you are using the PHP built-in server:Bashphp -S localhost:8000
+3. Open your browser and go to http://localhost:8000.
+   
+### SQL PERSISTANCE: 
+1. Clone the repositoryBashgit clone https://github.com/your-username/repo-name.git
+cd repo-name
+2. Database ConfigurationCreate a database named todo_db in your local environment (XAMPP, Laragon, etc.).Import the database.sql file located in the root directory.Note: Update your credentials in the connection file (e.g., config/db.inc.php):PHP$host = "localhost"; 
+$host = "localhost";
+$user = "root";
+$pass = "your_password";
+3. Run the ServerIf you are using the PHP built-in server:Bashphp -S localhost:8000
+4. open your browser and go to http://localhost:8000.
+
+# 📁 Project Structure
+
+<img width="634" height="1490" alt="taskomania_structure" src="https://github.com/user-attachments/assets/64518340-8259-4ce6-b71e-eacc5683ed9d" />
+
+# 🗂️ DATABASE structure
+
+<img width="547" height="572" alt="taskomania_database" src="https://github.com/user-attachments/assets/0ca841e4-85a2-421f-a01b-52df9967874c" />
+
+
+
+
+
