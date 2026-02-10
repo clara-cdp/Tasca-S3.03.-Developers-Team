@@ -10,7 +10,7 @@ This project focuses on implementing key backend concepts, including:
 - Persistence: Handling data storage using JSON files (for lightweight storage) and MySQL (for relational database persistence).
 
 
-## Features
+## ⚙️ Features
 
 - **CRUD:** Create, Read, Update, and Delete tasks.
 - **Task Status:** Toggle between "Pending" and "Completed" states by clicking "start task" or "finish".
@@ -19,41 +19,46 @@ This project focuses on implementing key backend concepts, including:
 - **Responsive Design:** Fully optimized for mobile and desktop views via Tailwind.
 - **Data Validation:** Secure input handling to prevent basic vulnerabilities.
 
-# 🛠️ Technology
+## 🛠️ Technology
 
 - **PHP 8**: Server-side logic and backend processing.
 - **JSON**: Lightweight data storage for file-based persistence.
 - **MySQL**: Relational database management.
 - **Tailwind CSS**: Utility-first styling for a modern look.
 
-# 🚀 Installation & Setup
+## 🚀 Installation & Setup
 Follow these steps to get the project running locally:
 
-### JSON PERSISTANCE: 
+#### JSON PERSISTANCE: 
 1. **switch to MAIN branch** 
-2. Clone the repositoryBashgit clone https://github.com/your-username/repo-name.git
-cd repo-name
-3. Run the Server If you are using the PHP built-in server:Bashphp -S localhost:8000
-4. Open your browser and go to http://localhost:8000.
+2. Clone the repositoryBashgit clone https://github.com/clara-cdp/Tasca-S3.03.-Developers-Team
+3. Run the Server If you are using the PHP built-in server:
+Bash:  _php -S localhost:8000_
+5. Open your browser and go to http://localhost:8000/web/home.
    
-### SQL PERSISTANCE: 
+#### SQL PERSISTANCE: 
 1. **switch to DEVELOP branch** 
-2. Clone the repositoryBashgit clone https://github.com/your-username/repo-name.git
-cd repo-name
-3. Database ConfigurationCreate a database named todo_db in your local environment (XAMPP, Laragon, etc.).Import the database.sql file located in the root directory.Note: Update your credentials in the connection file (e.g., config/db.inc.php):PHP$host = "localhost"; 
-$host = "localhost";
-$user = "root";
-$pass = "your_password";
-4. Run the ServerIf you are using the PHP built-in server:Bashphp -S localhost:8000
-5. open your browser and go to http://localhost:8000.
+2. Clone the repository
+3. Bash: _git clone https://github.com/clara-cdp/Tasca-S3.03.-Developers-Team_
+4. Database Configuration:
+   - Create a database named my_database in your local environment (XAMPP, Laragon, etc.).
+   - Import the my_database.sql file located in the config folder.
+   - Note: Update your credentials in the connection file (e.g., config/db.inc.php):
+     - $host = "localhost";
+     - $user = "root";
+     - $pass = "your_password";
+   
+6. Run the Server If you are using the PHP built-in server: Bash:  _php -S localhost:8000_
 
-# 📁 Project Structure
+9. open your browser and go to http://localhost:8000/web/home.
 
-<img width="634" height="1490" alt="taskomania_structure" src="https://github.com/user-attachments/assets/64518340-8259-4ce6-b71e-eacc5683ed9d" />
+## 📁 Project Structure
 
-# 🗂️ DATABASE structure
+<img width="400" height="AUTO" alt="taskomania_structure" src="https://github.com/user-attachments/assets/64518340-8259-4ce6-b71e-eacc5683ed9d" />
 
-<img width="547" height="572" alt="taskomania_database" src="https://github.com/user-attachments/assets/0ca841e4-85a2-421f-a01b-52df9967874c" />
+## 🗂️ DATABASE structure
+
+<img width="200" height="AUTO" alt="taskomania_database" src="https://github.com/user-attachments/assets/0ca841e4-85a2-421f-a01b-52df9967874c" />
 
 
 
