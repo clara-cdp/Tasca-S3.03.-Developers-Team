@@ -7,18 +7,8 @@ class TaskModel extends Model
         $this->_setTable('task');
     }
 
-    public function fetchOne($id) //  updated id with idTASK :_S
-    {
-        $sql = 'SELECT * FROM ' . $this->_table;
-        $sql .= ' WHERE idTASK = ?'; // real column name
 
-        $statement = $this->_dbh->prepare($sql);
-        $statement->execute(array($id));
-
-        return $statement->fetch(PDO::FETCH_OBJ);
-    }
-    // choose one - fetchOne or getTask
-    public function getTask($id)
+    public function fetchOne($id)
     {
         $sql = 'SELECT * FROM ' . $this->_table . ' WHERE idTASK = ?';
         $statement = $this->_dbh->prepare($sql);
