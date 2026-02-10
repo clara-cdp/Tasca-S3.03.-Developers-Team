@@ -13,10 +13,17 @@ class TaskModel extends Model
         $sql .= ' WHERE idTASK = ?'; // real column name
 
         $statement = $this->_dbh->prepare($sql);
-        //$statement->execute(array($id));
-        $statement->execute([$id]);
+        $statement->execute(array($id));
 
         return $statement->fetch(PDO::FETCH_OBJ);
+    }
+    // choose one - fetchOne or getTask
+    public function getTask($id)
+    {
+        $sql = 'SELECT * FROM ' . $this->_table . ' WHERE idTASK = ?';
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute(array($id));
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
     public function getAllTasks()
@@ -28,7 +35,6 @@ class TaskModel extends Model
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
-
     protected function _setTable($table)
     {
         $this->_table = $table;
@@ -89,12 +95,12 @@ class TaskModel extends Model
 
         return false;
     }
-
     public function deleteTask(int $id): bool
     {
         $statement = $this->_dbh->prepare("delete from " . $this->_table . " where idTASK = ?");
         return $statement->execute(array($id));
     }
+
 
     public function searchTasks(string $keyWord): array
     {
@@ -146,7 +152,16 @@ class TaskModel extends Model
 
         $statement = $this->_dbh->prepare($sql);
         $statement->execute(array($newState, $finishedAt, $taskID));
-     
     }
-
+    public function updateTask($task)
+    {
+        $data = [
+            'idTASK' => $task['idTASK'],
+            'task_title' => $task['task_title'],
+            'task_description' => $task['task_description'],
+            'user_name' => $task['user_name'],
+            'task_state' => $task['task_state']
+        ];
+        return $this->save($data);
+    }
 }
