@@ -9,6 +9,7 @@ This project focuses on implementing key backend concepts, including:
 
 - Persistence: Handling data storage using JSON files (for lightweight storage) and MySQL (for relational database persistence).
 
+<img width="2767" height="1459" alt="Captura de pantalla 2026-02-11 100941" src="https://github.com/user-attachments/assets/7c6f1e8b-2e59-407b-a140-58601c9804a6" />
 
 ## ⚙️ Features
 
@@ -25,6 +26,13 @@ This project focuses on implementing key backend concepts, including:
 - **JSON**: Lightweight data storage for file-based persistence.
 - **MySQL**: Relational database management.
 - **Tailwind CSS**: Utility-first styling for a modern look.
+
+ <img width="328" height="1137" alt="image" src="https://github.com/user-attachments/assets/d2b1df3b-f65e-46e8-94c0-959e77ed6552" />
+ <img width="280" height="auto" alt="image" src="https://github.com/user-attachments/assets/887e97af-b24b-47ba-a68b-7234b6ddb222" />
+ <img width="151" height="auto" alt="Captura de pantalla 2026-02-11 103152" src="https://github.com/user-attachments/assets/d6b9536d-3591-435e-837c-693489b9e2a7" />
+
+ 
+
 
 ## 🚀 Installation & Setup
 Follow these steps to get the project running locally:
