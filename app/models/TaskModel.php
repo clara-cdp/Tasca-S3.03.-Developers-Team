@@ -120,7 +120,7 @@ class TaskModel extends Model
     public function sortByDate(string $date): array
     {
         if ($date === "old") {
-            $sql = 'SELECT * FROM ' . $this->_table . ' ORDER BY created_at ASC';
+            $sql = 'SELECT * FROM ' . $this->_table . ' ORDER BY idTASK DESC';
 
             $statement = $this->_dbh->prepare($sql);
             $statement->execute(array());
