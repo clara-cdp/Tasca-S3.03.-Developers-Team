@@ -53,6 +53,7 @@ Bash:  _php -S localhost:8000_
    - Import the my_database.sql file located in the config folder.
    - Note: Update your credentials in the connection file (e.g., config/db.inc.php):
      - $host = "localhost";
+     - $dbname = "my_database" 
      - $user = "root";
      - $pass = "your_password";
    
